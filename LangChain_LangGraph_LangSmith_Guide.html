@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LangChain, LangGraph & LangSmith Guide</title>
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        /* Unique to this guide: not used by any other page */
+        .framework-box {
+            background: var(--bg-info);
+            border-left: 3px solid var(--text-info);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .framework-box h3 {
+            color: var(--text-info);
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .framework-box p {
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        /* This guide's collapsibles hold more content than the shared default */
+        .content.active {
+            max-height: 4000px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="site-nav">
+        <a href="index.html">&larr; All Guides</a>
+        <span class="site-nav-current">LangChain, LangGraph & LangSmith</span>
+    </nav>
+    <div class="container">
+        <h1>LangChain, LangGraph & LangSmith</h1>
+        <p class="subtitle">A beginner's guide to building, orchestrating, and monitoring LLM applications</p>
+        
+        <div class="concept-box">
+            <h3>The Three Frameworks</h3>
+            <p><strong>LangChain:</strong> Build LLM applications with components like chains and agents • <strong>LangGraph:</strong> Create complex workflows with branching, loops, and state management • <strong>LangSmith:</strong> Monitor, debug, and evaluate your applications in production</p>
+        </div>
+        
+        <div class="nav-tabs">
+            <div class="nav-tab active" onclick="switchTab('basics')">Basics</div>
+            <div class="nav-tab" onclick="switchTab('evolution')">Evolution</div>
+            <div class="nav-tab" onclick="switchTab('project')">Simple Project</div>
+            <div class="nav-tab" onclick="switchTab('deep-dive')">Deep Dive</div>
+        </div>
+        
+        <div id="basics-tab" style="display: block;">
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🔗</span>
+                    LangChain: Building Blocks
+                </div>
+                
+                <div class="card">
+                    <p><strong>What it is:</strong> A framework that makes it easy to build LLM applications by providing pre-built components you can combine.</p>
+                    <p style="margin-top: 12px; color: var(--text-secondary); font-size: 14px;"><strong>Simple analogy:</strong> Like LEGO blocks. Instead of building from scratch, you snap together pre-made pieces.</p>
+                </div>
+                
+                <div style="margin-top: 16px;">
+                    <div class="framework-box">
+                        <h3>Components You Get</h3>
+                        <p><strong>Models:</strong> Connect to Claude, GPT, and other LLMs</p>
+                    </div>
+                    
+                    <div class="framework-box">
+                        <h3>Prompts</h3>
+                        <p><strong>Prompt Templates:</strong> Reusable, dynamic prompts with variables</p>
+                    </div>
+                    
+                    <div class="framework-box">
+                        <h3>Chains</h3>
+                        <p><strong>Chain Multiple Steps:</strong> Connect prompts, models, tools in sequence</p>
+                    </div>
+                    
+                    <div class="framework-box">
+                        <h3>Agents</h3>
+                        <p><strong>Autonomous Behavior:</strong> LLM decides which tools to use and when</p>
+                    </div>
+                    
+                    <div class="framework-box">
+                        <h3>Memory</h3>
+                        <p><strong>Conversation History:</strong> Remember previous messages and context</p>
+                    </div>
+                    
+                    <div class="framework-box">
+                        <h3>Document Loaders</h3>
+                        <p><strong>Load Any Format:</strong> PDFs, CSVs, web pages, databases</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">📊</span>
+                    LangGraph: Complex Workflows
+                </div>
+                
+                <div class="card">
+                    <p><strong>What it is:</strong> Builds on LangChain to handle complex workflows with branching logic, loops, and state management.</p>
+                    <p style="margin-top: 12px; color: var(--text-secondary); font-size: 14px;"><strong>Simple analogy:</strong> If LangChain is a straight line, LangGraph is a flowchart with decisions and loops.</p>
+                </div>
+                
+                <div class="flow-diagram">
+                    <div class="flow-box" style="background: var(--bg-success);">Start</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">Decision</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">Action A</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box" style="background: var(--bg-danger);">End</div>
+                </div>
+                
+                <div style="margin-top: 16px;">
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">LangGraph lets you build workflows like this with:</p>
+                    <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                        <li style="margin-bottom: 8px;">Nodes - Steps that do work</li>
+                        <li style="margin-bottom: 8px;">Edges - Connections between steps</li>
+                        <li style="margin-bottom: 8px;">Conditional logic - Route based on conditions</li>
+                        <li style="margin-bottom: 8px;">State - Track data through the workflow</li>
+                        <li>Loops - Go back to earlier steps</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">👁️</span>
+                    LangSmith: Monitoring & Debugging
+                </div>
+                
+                <div class="card">
+                    <p><strong>What it is:</strong> A platform to see, debug, and improve your LLM applications in production.</p>
+                    <p style="margin-top: 12px; color: var(--text-secondary); font-size: 14px;"><strong>Simple analogy:</strong> Like a dashboard for your car showing engine health, fuel, temperature, etc.</p>
+                </div>
+                
+                <div style="margin-top: 16px;">
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;"><strong>What you get:</strong></p>
+                    <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                        <li style="margin-bottom: 8px;">📝 <strong>Trace</strong> - See every step your app takes</li>
+                        <li style="margin-bottom: 8px;">🐛 <strong>Debug</strong> - Find where things go wrong</li>
+                        <li style="margin-bottom: 8px;">📊 <strong>Metrics</strong> - Track latency, cost, errors</li>
+                        <li style="margin-bottom: 8px;">📈 <strong>Analytics</strong> - Understand usage patterns</li>
+                        <li style="margin-bottom: 8px;">⭐ <strong>Evaluate</strong> - Score output quality</li>
+                        <li>🔁 <strong>Iterate</strong> - Test improvements before deploying</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🔄</span>
+                    How They Work Together
+                </div>
+                
+                <div class="flow-diagram">
+                    <div class="flow-box" style="background: var(--bg-accent);">LangChain</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-box" style="background: var(--bg-info);">Builds with</div>
+                </div>
+                
+                <div style="margin-top: 12px;">
+                    <div class="flow-diagram">
+                        <div class="flow-box" style="background: var(--bg-success);">LangGraph</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-box">Complex workflows</div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 12px;">
+                    <div class="flow-diagram">
+                        <div class="flow-box" style="background: var(--bg-warning);">LangSmith</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-box">Monitors in production</div>
+                    </div>
+                </div>
+                
+                <div class="card" style="margin-top: 20px;">
+                    <p style="margin-bottom: 12px;"><strong>The Flow:</strong></p>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 8px;">1. You build with <strong>LangChain</strong> components (chains, agents, memory)</p>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 8px;">2. Combine with <strong>LangGraph</strong> for complex workflows with logic</p>
+                    <p style="color: var(--text-secondary); font-size: 14px;">3. Deploy and monitor with <strong>LangSmith</strong> to debug and improve</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="evolution-tab" style="display: none;">
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">📈</span>
+                    From Simple to Complex
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">1</span>
+                        Simple: Just LangChain
+                    </div>
+                    <div class="step-description">
+                        <p>Good for: Simple chains, basic agents, RAG systems</p>
+                        <p style="margin-top: 8px; color: var(--text-primary); font-weight: 500;">Pros:</p>
+                        <ul style="margin-left: 20px; margin-top: 4px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Simple, fast to build</li>
+                            <li>Good for prototypes</li>
+                        </ul>
+                        <p style="margin-top: 8px; color: var(--text-primary); font-weight: 500;">Cons:</p>
+                        <ul style="margin-left: 20px; margin-top: 4px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Hard to handle complex logic</li>
+                            <li>No state management</li>
+                            <li>Difficult branching</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">2</span>
+                        Medium: LangChain + LangGraph
+                    </div>
+                    <div class="step-description">
+                        <p>Good for: Workflows with decisions, loops, complex agents</p>
+                        <p style="margin-top: 8px; color: var(--text-primary); font-weight: 500;">Pros:</p>
+                        <ul style="margin-left: 20px; margin-top: 4px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Handle complex logic</li>
+                            <li>Branching and loops</li>
+                            <li>State management</li>
+                        </ul>
+                        <p style="margin-top: 8px; color: var(--text-primary); font-weight: 500;">Cons:</p>
+                        <ul style="margin-left: 20px; margin-top: 4px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Need to understand graph patterns</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">3</span>
+                        Advanced: All Three + LangSmith
+                    </div>
+                    <div class="step-description">
+                        <p>Good for: Production systems, complex agents, monitoring, optimization</p>
+                        <p style="margin-top: 8px; color: var(--text-primary); font-weight: 500;">Pros:</p>
+                        <ul style="margin-left: 20px; margin-top: 4px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Full visibility into system</li>
+                            <li>Debug issues easily</li>
+                            <li>Optimize based on data</li>
+                            <li>Production-ready</li>
+                        </ul>
+                        <p style="margin-top: 8px; color: var(--text-primary); font-weight: 500;">Cons:</p>
+                        <ul style="margin-left: 20px; margin-top: 4px; color: var(--text-secondary); font-size: 14px;">
+                            <li>More complex setup</li>
+                            <li>Learning curve</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🎯</span>
+                    When to Use Each
+                </div>
+                
+                <div class="card">
+                    <p style="margin-bottom: 12px;"><strong>Use just LangChain if:</strong></p>
+                    <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                        <li>Building a quick prototype</li>
+                        <li>Simple RAG system</li>
+                        <li>Linear chains without branching</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <p style="margin-bottom: 12px;"><strong>Add LangGraph if:</strong></p>
+                    <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                        <li>Need conditional logic (if/else)</li>
+                        <li>Loops and retries</li>
+                        <li>Complex multi-agent systems</li>
+                        <li>Need to track state</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <p style="margin-bottom: 12px;"><strong>Add LangSmith if:</strong></p>
+                    <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                        <li>Going to production</li>
+                        <li>Need to debug issues</li>
+                        <li>Want to monitor quality</li>
+                        <li>Need to optimize costs</li>
+                        <li>Comparing prompts/models</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div id="project-tab" style="display: none;">
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🚀</span>
+                    Simple Project: Customer Support Agent
+                </div>
+                
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">We'll build a customer support agent that handles tickets, escalates when needed, and tracks everything with LangSmith.</p>
+                
+                <div class="concept-box">
+                    <h3>Project Goal</h3>
+                    <p>Build a system using LangChain (chains), LangGraph (workflow with escalation logic), and monitor with LangSmith (see what's happening)</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">📋</span>
+                    Step-by-Step Implementation
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">1</span>
+                        Install Libraries
+                    </div>
+                    <div class="step-description">
+                        <p>Get the tools you need:</p>
+                        <pre>pip install langchain langchain-anthropic \
+    langgraph langsmith python-dotenv</pre>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">2</span>
+                        Set Up LangSmith
+                    </div>
+                    <div class="step-description">
+                        <p>Create free account and get API key from langsmith.com, then:</p>
+                        <pre>export LANGSMITH_API_KEY="your-key"
+export LANGSMITH_PROJECT="customer-support-demo"</pre>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">3</span>
+                        Build with LangChain + LangGraph
+                    </div>
+                    <div class="step-description">
+                        <p>Create <code>support_agent.py</code>:</p>
+                        <pre>from langchain_anthropic import ChatAnthropic
+from langchain.prompts import PromptTemplate
+from langchain.chains import LLMChain
+from langgraph.graph import StateGraph, START, END
+from typing import TypedDict, Annotated
+import operator
+import json
+import os
+
+# ==================== SETUP ====================
+os.environ["LANGSMITH_TRACING"] = "true"
+
+llm = ChatAnthropic(model="claude-opus-4-1")
+
+# ==================== LANGCHAIN COMPONENTS ====================
+class SupportChain:
+    """LangChain components for support"""
+    
+    def __init__(self):
+        # Triage prompt - decide if this is simple or complex
+        triage_prompt = PromptTemplate(
+            input_variables=["customer_issue"],
+            template="""You are a support triage agent. 
+            Analyze this customer issue and decide: simple or complex?
+            
+            Issue: {customer_issue}
+            
+            Output only: SIMPLE or COMPLEX"""
+        )
+        
+        # Response generation
+        response_prompt = PromptTemplate(
+            input_variables=["customer_issue"],
+            template="""You are a helpful support agent.
+            Respond to this customer issue professionally:
+            
+            Issue: {customer_issue}
+            
+            Provide a helpful response."""
+        )
+        
+        self.triage_chain = LLMChain(
+            llm=llm,
+            prompt=triage_prompt
+        )
+        
+        self.response_chain = LLMChain(
+            llm=llm,
+            prompt=response_prompt
+        )
+    
+    def triage(self, issue):
+        """Determine complexity"""
+        result = self.triage_chain.run(customer_issue=issue)
+        return "COMPLEX" in result.upper()
+    
+    def respond(self, issue):
+        """Generate response"""
+        result = self.response_chain.run(customer_issue=issue)
+        return result
+
+# ==================== LANGGRAPH STATE & NODES ====================
+class TicketState(TypedDict):
+    """State for the support workflow"""
+    customer_issue: str
+    is_complex: bool
+    response: str
+    escalated: bool
+    agent_notes: str
+
+def receive_ticket(state: TicketState) -> TicketState:
+    """Node 1: Receive and log ticket"""
+    print(f"\\n📬 Received ticket: {state['customer_issue'][:50]}...")
+    state["agent_notes"] = "Ticket received"
+    return state
+
+def analyze_ticket(state: TicketState) -> TicketState:
+    """Node 2: Analyze complexity"""
+    support = SupportChain()
+    is_complex = support.triage(state["customer_issue"])
+    state["is_complex"] = is_complex
+    state["agent_notes"] += f" → Analyzed (complex={is_complex})"
+    print(f"🔍 Complexity: {'HIGH' if is_complex else 'LOW'}")
+    return state
+
+def handle_simple(state: TicketState) -> TicketState:
+    """Node 3a: Handle simple tickets"""
+    support = SupportChain()
+    response = support.respond(state["customer_issue"])
+    state["response"] = response
+    state["escalated"] = False
+    state["agent_notes"] += " → Handled (SIMPLE)"
+    print(f"✅ Simple response generated")
+    return state
+
+def escalate_ticket(state: TicketState) -> TicketState:
+    """Node 3b: Escalate complex tickets"""
+    state["response"] = "This issue needs human expertise. Escalating..."
+    state["escalated"] = True
+    state["agent_notes"] += " → ESCALATED to human"
+    print(f"⚠️ Escalated to human agent")
+    return state
+
+def create_summary(state: TicketState) -> TicketState:
+    """Node 4: Create summary"""
+    summary = {
+        "issue": state["customer_issue"][:100],
+        "complexity": "HIGH" if state["is_complex"] else "LOW",
+        "escalated": state["escalated"],
+        "response": state["response"][:100] if state["response"] else "N/A",
+        "notes": state["agent_notes"]
+    }
+    print(f"\\n📋 Summary: {json.dumps(summary, indent=2)}")
+    return state
+
+# ==================== BUILD LANGGRAPH WORKFLOW ====================
+def should_escalate(state: TicketState) -> str:
+    """Conditional logic: route based on complexity"""
+    return "escalate" if state["is_complex"] else "simple"
+
+def build_graph():
+    """Create the workflow graph"""
+    graph = StateGraph(TicketState)
+    
+    # Add nodes
+    graph.add_node("receive", receive_ticket)
+    graph.add_node("analyze", analyze_ticket)
+    graph.add_node("simple", handle_simple)
+    graph.add_node("escalate", escalate_ticket)
+    graph.add_node("summary", create_summary)
+    
+    # Add edges
+    graph.add_edge(START, "receive")
+    graph.add_edge("receive", "analyze")
+    
+    # Conditional edge - branch based on complexity
+    graph.add_conditional_edges(
+        "analyze",
+        should_escalate,
+        {
+            "simple": "simple",
+            "escalate": "escalate"
+        }
+    )
+    
+    # Both paths lead to summary
+    graph.add_edge("simple", "summary")
+    graph.add_edge("escalate", "summary")
+    graph.add_edge("summary", END)
+    
+    return graph.compile()
+
+# ==================== MAIN ====================
+if __name__ == "__main__":
+    print("🤖 Customer Support Agent with LangChain + LangGraph + LangSmith\\n")
+    
+    # Build workflow
+    workflow = build_graph()
+    
+    # Test cases
+    test_tickets = [
+        "My password isn't working, how do I reset it?",
+        "I found a complex security vulnerability in your system that could expose customer data. Details at [...]"
+    ]
+    
+    for ticket in test_tickets:
+        print(f"\\n{'='*60}")
+        
+        # Run through workflow
+        result = workflow.invoke({
+            "customer_issue": ticket,
+            "is_complex": False,
+            "response": "",
+            "escalated": False,
+            "agent_notes": ""
+        })
+        
+        print(f"\\n✅ Ticket processed")
+        print(f"   Escalated: {result['escalated']}")
+    
+    print(f"\\n{'='*60}")
+    print("✨ Check LangSmith dashboard for full traces!")
+    print("   Visit: https://smith.langchain.com/")</pre>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">4</span>
+                        Run and Monitor
+                    </div>
+                    <div class="step-description">
+                        <p>Run your agent:</p>
+                        <pre>python support_agent.py</pre>
+                        <p style="margin-top: 12px;"><strong>You'll see:</strong></p>
+                        <div class="example-output">🤖 Customer Support Agent with LangChain + LangGraph + LangSmith
+
+============================================================
+
+📬 Received ticket: My password isn't working, how do I reset it?
+🔍 Complexity: LOW
+✅ Simple response generated
+
+📋 Summary: {
+  "issue": "My password isn't working, how do I reset it?",
+  "complexity": "LOW",
+  "escalated": false,
+  "response": "To reset your password, click the 'Forgot Password' button...",
+  "notes": "Ticket received → Analyzed (complex=False) → Handled (SIMPLE)"
+}
+
+✅ Ticket processed
+   Escalated: false
+
+============================================================
+
+📬 Received ticket: I found a complex security vulnerability...
+🔍 Complexity: HIGH
+⚠️ Escalated to human agent
+
+📋 Summary: {
+  "issue": "I found a complex security vulnerability...",
+  "complexity": "HIGH",
+  "escalated": true,
+  "response": "This issue needs human expertise. Escalating...",
+  "notes": "Ticket received → Analyzed (complex=True) → ESCALATED to human"
+}
+
+✅ Ticket processed
+   Escalated: true
+
+============================================================
+✨ Check LangSmith dashboard for full traces!</div>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">5</span>
+                        View in LangSmith
+                    </div>
+                    <div class="step-description">
+                        <p>Go to https://smith.langchain.com/ and you'll see:</p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px; margin-top: 8px;">
+                            <li>📊 Full trace of each ticket through the workflow</li>
+                            <li>⏱️ Timing for each node</li>
+                            <li>💰 Cost of LLM calls</li>
+                            <li>🐛 Exact prompts and responses</li>
+                            <li>📈 Patterns across all tickets</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="deep-dive-tab" style="display: none;">
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🔗</span>
+                    Deep Dive: LangChain Details
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>Key Components</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>1. LLM Model</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 6px; margin-bottom: 12px;">Connect to any LLM (Claude, GPT, Llama, etc.)</p>
+                        
+                        <p><strong>2. Prompt Templates</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 6px; margin-bottom: 12px;">Dynamic prompts with variables. Reuse across projects.</p>
+                        
+                        <p><strong>3. Chains</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 6px; margin-bottom: 12px;">Combine prompts → model → output in sequence</p>
+                        
+                        <p><strong>4. Tools & Agents</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 6px; margin-bottom: 12px;">Define what agent can do (APIs, searches, calculations)</p>
+                        
+                        <p><strong>5. Memory</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 6px; margin-bottom: 12px;">Store conversation history. Types: buffer, summary, entity</p>
+                        
+                        <p><strong>6. Document Loaders</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 6px;">Load PDFs, CSVs, web pages, docs for RAG</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Common Patterns</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Sequential Chain</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 6px; margin-bottom: 12px;">A → B → C (output of A is input for B)</p>
+                        
+                        <p><strong>Router Chain</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 6px; margin-bottom: 12px;">Decide which chain to use based on input</p>
+                        
+                        <p><strong>Memory Chain</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 6px; margin-bottom: 12px;">Remember conversation history</p>
+                        
+                        <p><strong>Agent Loop</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">LLM decides which tools to use, loops until done</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">📊</span>
+                    Deep Dive: LangGraph Details
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>Graph Concepts</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Nodes:</strong> Functions that do work. Similar to steps in a flowchart.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Edges:</strong> Connections between nodes. Define the flow.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Conditional Edges:</strong> Route to different nodes based on state. Like if/else statements.</p>
+                        
+                        <p><strong>State:</strong> Data passed between nodes. Shared context.</p>
+                        
+                        <div class="architecture-box" style="margin-top: 12px;">
+graph = StateGraph(MyState)
+
+graph.add_node("step1", func1)
+graph.add_node("step2", func2)
+graph.add_node("step3", func3)
+
+graph.add_edge("step1", "step2")
+graph.add_conditional_edges(
+    "step2",
+    should_continue,  # function that decides
+    {
+        "yes": "step3",
+        "no": END
+    }
+)
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>When to Use Graph Patterns</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Linear Flow</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 6px; margin-bottom: 12px;">A → B → C. No branching. Use simple chains.</p>
+                        
+                        <p><strong>Conditional Flow</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 6px; margin-bottom: 12px;">If X, do A; else do B. Use conditional edges.</p>
+                        
+                        <p><strong>Loops</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 6px; margin-bottom: 12px;">Retry or repeat until condition met. Connect edge back to earlier node.</p>
+                        
+                        <p><strong>Parallel Paths</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Multiple tasks at same time. Use parallel node execution.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">👁️</span>
+                    Deep Dive: LangSmith Details
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>What LangSmith Tracks</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Traces:</strong> Complete record of one execution. See every step, every call.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Spans:</strong> Individual operations within a trace. Nested hierarchy.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Runs:</strong> Individual invocations of your system. Track over time.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Feedback:</strong> Rate quality of outputs. 👍/👎 or custom scores.</p>
+                        
+                        <p><strong>Metrics:</strong> Latency, cost, error rate, quality. Aggregated over time.</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Using LangSmith for Debugging</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>1. View Traces</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">See exactly what happened step by step</p>
+                        
+                        <p style="margin-top: 12px; margin-bottom: 12px;"><strong>2. Check Inputs/Outputs</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">See exact prompts sent and responses received</p>
+                        
+                        <p style="margin-top: 12px; margin-bottom: 12px;"><strong>3. Find Errors</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Spot where things went wrong</p>
+                        
+                        <p style="margin-top: 12px; margin-bottom: 12px;"><strong>4. Compare Versions</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Test new prompts/models before deploying</p>
+                        
+                        <p style="margin-top: 12px;"><strong>5. Analyze Patterns</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Find common failure modes across runs</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Adding Feedback & Evals</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Manual Feedback:</strong> Thumbs up/down on outputs</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Automatic Evals:</strong> Score quality with another LLM</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Scoring Functions:</strong> Custom metrics for your use case</p>
+                        
+                        <p><strong>Example:</strong> For customer support, score if agent escalated correctly</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🏗️</span>
+                    Architecture Patterns
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>Simple RAG with LangChain</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <div class="architecture-box">
+1. Load documents (PDFs, docs)
+2. Split into chunks
+3. Create embeddings
+4. Store in vector DB
+5. On query:
+   - Retrieve relevant chunks
+   - Build prompt with chunks
+   - Send to LLM
+   - Return answer with sources
+                        </div>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 12px;">Perfect for knowledge bases, FAQs, documentation Q&A</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Agent with Tools (LangChain + LangGraph)</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <div class="architecture-box">
+LLM sees available tools
+LLM decides which to use
+Execute tool
+Pass result back to LLM
+LLM decides next action
+Repeat until done
+
+Graph handles the loop:
+- Node: "think" → LLM decides
+- Node: "act" → execute tool
+- Conditional: "continue?" → yes/no
+                        </div>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 12px;">Good for search, calculation, API calls</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Multi-Agent Coordinator (All Three)</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <div class="architecture-box">
+Coordinator Agent (LangChain)
+   ├── Can use router chains
+   └── Routes to specialist agents
+
+Specialist Agents (LangGraph)
+   ├── Research Agent
+   ├── Writer Agent
+   └── Editor Agent
+
+LangSmith monitors:
+   - What each agent did
+   - How long it took
+   - Where errors occurred
+   - Quality of outputs
+                        </div>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 12px;">Good for complex projects requiring specialization</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">⚠️</span>
+                    Common Pitfalls & Solutions
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>Infinite Loops</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Problem:</strong> Agent keeps doing same thing forever</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;"><strong>Solution:</strong> Set max iterations. Track what's been tried. Add clear exit conditions.</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Cost Explosion</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Problem:</strong> Agent makes many LLM calls, costs add up</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;"><strong>Solution:</strong> Use cheaper models for simple steps. Cache prompts. Limit iterations. Monitor in LangSmith.</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>State Management Issues</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Problem:</strong> Data gets lost between nodes or modified unexpectedly</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;"><strong>Solution:</strong> Use TypedDict to define state clearly. Always return updated state from nodes. Use immutable patterns.</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Debugging Complex Graphs</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Problem:</strong> Multi-agent system is hard to understand</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;"><strong>Solution:</strong> Use LangSmith to visualize. Test each node independently first. Add debug logging. Visualize graph structure.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🌍</span>
+                    Real-World Applications
+                </div>
+                
+                <div class="card">
+                    <p style="margin-bottom: 12px;"><strong>Customer Support (LangChain + LangGraph):</strong> Triage tickets, escalate complex ones, learn from feedback via LangSmith</p>
+                    
+                    <p style="margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--border); margin-bottom: 12px;"><strong>Research Assistant (All Three):</strong> Search papers → summarize → synthesize. Monitor quality with LangSmith.</p>
+                    
+                    <p style="margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--border); margin-bottom: 12px;"><strong>Code Analysis (LangGraph):</strong> Parse code → analyze for issues → suggest fixes. Parallel execution of multiple checks.</p>
+                    
+                    <p style="margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--border);">
+                    <strong>Content Pipeline (All Three):</strong> Research → write → edit → publish. Each step is a node. Track quality at each stage.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 0.5px solid var(--border);">
+            <div class="section-title">
+                <span class="section-icon">🎓</span>
+                Quick Comparison Table
+            </div>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>LangChain</th>
+                        <th>LangGraph</th>
+                        <th>LangSmith</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Purpose</strong></td>
+                        <td>Build blocks</td>
+                        <td>Complex workflows</td>
+                        <td>Monitor & debug</td>
+                    </tr>
+                    <tr>
+                        <td><strong>When needed</strong></td>
+                        <td>Always</td>
+                        <td>Complex logic</td>
+                        <td>Production</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Branching</strong></td>
+                        <td>Limited</td>
+                        <td>Full support</td>
+                        <td>N/A</td>
+                    </tr>
+                    <tr>
+                        <td><strong>State</strong></td>
+                        <td>Variables</td>
+                        <td>TypedDict</td>
+                        <td>Tracks state</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Loops</strong></td>
+                        <td>Manual</td>
+                        <td>Native</td>
+                        <td>Visualizes</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Monitoring</strong></td>
+                        <td>None</td>
+                        <td>None</td>
+                        <td>Full visibility</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Learning curve</strong></td>
+                        <td>Easy</td>
+                        <td>Medium</td>
+                        <td>Easy</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 0.5px solid var(--border);">
+            <div class="section-title">
+                <span class="section-icon">🎓</span>
+                Next Steps to Master All Three
+            </div>
+            <div class="card">
+                <ol style="padding-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                    <li style="margin-bottom: 8px;">Start with LangChain basics (chains, memory, agents)</li>
+                    <li style="margin-bottom: 8px;">Build a simple RAG application</li>
+                    <li style="margin-bottom: 8px;">Add LangGraph for workflows with branching</li>
+                    <li style="margin-bottom: 8px;">Create a multi-agent system with LangGraph</li>
+                    <li style="margin-bottom: 8px;">Set up LangSmith to monitor a project</li>
+                    <li style="margin-bottom: 8px;">Run evals in LangSmith to measure quality</li>
+                    <li style="margin-bottom: 8px;">Deploy to production with full monitoring</li>
+                    <li>Continuously improve based on LangSmith insights</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function switchTab(tab) {
+            // Hide all tabs
+            document.getElementById('basics-tab').style.display = 'none';
+            document.getElementById('evolution-tab').style.display = 'none';
+            document.getElementById('project-tab').style.display = 'none';
+            document.getElementById('deep-dive-tab').style.display = 'none';
+            
+            // Show selected tab
+            document.getElementById(tab + '-tab').style.display = 'block';
+            
+            // Update nav buttons
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        function toggleCollapsible(element) {
+            const collapsible = element;
+            const content = element.nextElementSibling;
+            
+            collapsible.classList.toggle('active');
+            content.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

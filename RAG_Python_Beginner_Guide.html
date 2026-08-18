@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG in Python - Beginner Guide</title>
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        /* Unique to this guide: not used by any other page */
+        .problem-box {
+            background: var(--bg-danger);
+            border-left: 3px solid var(--text-danger);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .problem-box h3 {
+            color: var(--text-danger);
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .problem-box p {
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .pipeline-step {
+            background: var(--surface-1);
+            border: 0.5px solid var(--border);
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .pipeline-step strong {
+            color: var(--text-primary);
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        /* This guide never set a font-size on comparison-table th; keep that as-is */
+        .comparison-table th {
+            font-size: inherit;
+        }
+
+        /* This guide's collapsibles hold less content than the shared default */
+        .content.active {
+            max-height: 3000px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="site-nav">
+        <a href="index.html">&larr; All Guides</a>
+        <span class="site-nav-current">Understanding RAG in Python</span>
+    </nav>
+    <div class="container">
+        <h1>Understanding RAG in Python</h1>
+        <p class="subtitle">A beginner's guide to Retrieval-Augmented Generation</p>
+        
+        <div class="concept-box">
+            <h3>What is RAG?</h3>
+            <p>RAG stands for "Retrieval-Augmented Generation." It's a technique that lets AI models (like Claude) access and learn from your documents, databases, or knowledge bases in real-time. Instead of relying only on what the AI already knows, RAG retrieves relevant information first, then uses it to give better answers.</p>
+        </div>
+        
+        <div class="nav-tabs">
+            <div class="nav-tab active" onclick="switchTab('basics')">Basics</div>
+            <div class="nav-tab" onclick="switchTab('problem')">The Problem</div>
+            <div class="nav-tab" onclick="switchTab('project')">Simple Project</div>
+            <div class="nav-tab" onclick="switchTab('deep-dive')">Deep Dive</div>
+        </div>
+        
+        <div id="basics-tab" style="display: block;">
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🧠</span>
+                    How AI Works Without RAG
+                </div>
+                
+                <div class="card">
+                    <p><strong>Regular AI:</strong> The model has knowledge from its training data, which is frozen in time. It can't access new information or your personal documents.</p>
+                    <p style="margin-top: 12px; color: var(--text-secondary); font-size: 14px;"><strong>Example:</strong> Ask Claude about a document you just created, and it won't know anything about it because it wasn't in the training data.</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">✨</span>
+                    How AI Works With RAG
+                </div>
+                
+                <div class="card">
+                    <p><strong>RAG-Enhanced AI:</strong> The model first searches your documents, finds relevant information, then uses that information to answer your question.</p>
+                    <p style="margin-top: 12px; color: var(--text-secondary); font-size: 14px;"><strong>Example:</strong> Ask Claude about your document, RAG finds the relevant parts, and Claude answers accurately based on your actual content.</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🔄</span>
+                    RAG in Three Steps
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">1</span>
+                        Retrieve
+                    </div>
+                    <div class="step-description">Search your documents to find relevant information that matches the user's question.</div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">2</span>
+                        Augment
+                    </div>
+                    <div class="step-description">Add the retrieved information to the AI's context (like giving it additional reference material).</div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">3</span>
+                        Generate
+                    </div>
+                    <div class="step-description">The AI reads the context and generates an accurate answer based on your actual documents.</div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🎯</span>
+                    Visual Flow
+                </div>
+                
+                <div class="flow-diagram">
+                    <div class="flow-box">User Question</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box" style="background: var(--bg-success);">Search Docs</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">Add Context</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">AI Answers</div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">⚙️</span>
+                    Key Components
+                </div>
+                
+                <div class="card">
+                    <div style="margin-bottom: 16px;">
+                        <strong style="color: var(--text-primary);">Vector Database</strong>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 4px;">Stores your documents in a way that makes searching super fast (like a smart filing system)</p>
+                    </div>
+                    <div style="margin-bottom: 16px; padding-top: 16px; border-top: 0.5px solid var(--border);">
+                        <strong style="color: var(--text-primary);">Embeddings</strong>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 4px;">Convert text into numbers so computers can compare and find similar documents</p>
+                    </div>
+                    <div style="margin-bottom: 16px; padding-top: 16px; border-top: 0.5px solid var(--border);">
+                        <strong style="color: var(--text-primary);">LLM (Large Language Model)</strong>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 4px;">The AI that reads your question and the retrieved documents, then writes the answer</p>
+                    </div>
+                    <div style="padding-top: 16px; border-top: 0.5px solid var(--border);">
+                        <strong style="color: var(--text-primary);">Chunking</strong>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 4px;">Breaking large documents into smaller pieces so they're easier to search and retrieve</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="problem-tab" style="display: none;">
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">❌</span>
+                    Problems RAG Solves
+                </div>
+                
+                <div class="problem-box">
+                    <h3>Problem 1: Hallucinations</h3>
+                    <p>AI models sometimes make up facts that sound true but are wrong. RAG prevents this by giving the AI real information to work with.</p>
+                </div>
+                
+                <div class="problem-box">
+                    <h3>Problem 2: Outdated Knowledge</h3>
+                    <p>AI training happens at a specific point in time. Information after that date is unknown. RAG lets AI access current documents and information.</p>
+                </div>
+                
+                <div class="problem-box">
+                    <h3>Problem 3: Private Information</h3>
+                    <p>You can't ask an AI about private company documents or confidential files. RAG lets you safely give the AI access to specific documents.</p>
+                </div>
+                
+                <div class="problem-box">
+                    <h3>Problem 4: Context Length Limits</h3>
+                    <p>AI models can only "remember" a limited amount of text. RAG finds the most relevant information, so you don't hit those limits.</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">📊</span>
+                    Regular AI vs RAG
+                </div>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Regular AI</th>
+                            <th>RAG AI</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Access to your docs</strong></td>
+                            <td>❌ No</td>
+                            <td>✅ Yes</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Hallucinations</strong></td>
+                            <td>⚠️ Common</td>
+                            <td>✅ Reduced</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Current information</strong></td>
+                            <td>❌ Outdated</td>
+                            <td>✅ Fresh</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Factual accuracy</strong></td>
+                            <td>⚠️ ~70-80%</td>
+                            <td>✅ ~95%+</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Privacy</strong></td>
+                            <td>❌ Data used for training</td>
+                            <td>✅ Local documents</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Complexity</strong></td>
+                            <td>✅ Simple</td>
+                            <td>⚠️ More setup</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">💡</span>
+                    Real-World Example
+                </div>
+                
+                <div class="card">
+                    <p><strong>Scenario:</strong> You have a 200-page company handbook and want to ask questions about it.</p>
+                    
+                    <div style="margin-top: 16px; padding-top: 16px; border-top: 0.5px solid var(--border);">
+                        <p style="margin-bottom: 8px;"><strong style="color: var(--text-primary);">Without RAG:</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">You'd have to copy-paste entire handbook pages every time. The AI would still hallucinate details.</p>
+                    </div>
+                    
+                    <div style="margin-top: 16px; padding-top: 16px; border-top: 0.5px solid var(--border);">
+                        <p style="margin-bottom: 8px;"><strong style="color: var(--text-primary);">With RAG:</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">You ask a question. RAG instantly finds the relevant handbook sections. The AI answers based on those exact sections. Accurate and fast!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="project-tab" style="display: none;">
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🚀</span>
+                    Simple Project: A Q&A System
+                </div>
+                
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">We'll build a RAG system that lets you ask questions about your documents. We'll use simple text files and Python.</p>
+                
+                <div class="concept-box">
+                    <h3>Project Goal</h3>
+                    <p>Create a system that: (1) Stores documents, (2) Searches them when you ask a question, (3) Uses AI to answer based on actual document content</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">📋</span>
+                    Step-by-Step Walkthrough
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">1</span>
+                        Install Required Libraries
+                    </div>
+                    <div class="step-description">
+                        <p>Install the tools you'll need:</p>
+                        <pre>pip install openai python-dotenv</pre>
+                        <p style="margin-top: 8px;"><code>openai</code> = to use Claude, <code>python-dotenv</code> = to manage API keys safely</p>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">2</span>
+                        Create Sample Documents
+                    </div>
+                    <div class="step-description">
+                        <p>Create a folder called <code>documents</code> with text files. Example <code>company_rules.txt</code>:</p>
+                        <pre>Company Handbook
+
+Work Hours:
+Monday to Friday, 9 AM to 5 PM
+Flexible hours available if approved by manager.
+
+Vacation Policy:
+New employees: 15 days per year
+After 3 years: 20 days per year
+After 5 years: 25 days per year
+
+Remote Work:
+Allowed 2 days per week
+Must coordinate with team leads
+Core hours: 10 AM to 3 PM required to be online</pre>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">3</span>
+                        Build Simple RAG System
+                    </div>
+                    <div class="step-description">
+                        <p>Create <code>simple_rag.py</code>:</p>
+                        <pre>import os
+import glob
+from anthropic import Anthropic
+
+# 1. LOAD DOCUMENTS
+documents = []
+for file_path in glob.glob("documents/*.txt"):
+    with open(file_path, 'r') as f:
+        documents.append({
+            "name": os.path.basename(file_path),
+            "content": f.read()
+        })
+
+print(f"Loaded {len(documents)} documents")
+
+# 2. SIMPLE SEARCH (find relevant docs)
+def search_documents(query, documents):
+    """Find documents that mention keywords from the query"""
+    query_words = query.lower().split()
+    relevant_docs = []
+    
+    for doc in documents:
+        content_lower = doc['content'].lower()
+        # Count how many query words appear in this doc
+        matches = sum(1 for word in query_words 
+                     if word in content_lower)
+        
+        if matches > 0:
+            relevant_docs.append({
+                "name": doc['name'],
+                "content": doc['content'],
+                "relevance": matches
+            })
+    
+    # Sort by relevance (most relevant first)
+    relevant_docs.sort(key=lambda x: x['relevance'], reverse=True)
+    return relevant_docs
+
+# 3. SETUP AI CLIENT
+client = Anthropic()
+
+# 4. MAIN CONVERSATION LOOP
+print("\n📚 RAG Q&A System Started!")
+print("Ask questions about your documents (type 'quit' to exit)\n")
+
+while True:
+    question = input("Your question: ").strip()
+    
+    if question.lower() == 'quit':
+        break
+    
+    # Step 1: RETRIEVE - Find relevant documents
+    relevant_docs = search_documents(question, documents)
+    
+    if not relevant_docs:
+        print("No relevant documents found.\n")
+        continue
+    
+    # Step 2: AUGMENT - Create context from retrieved documents
+    context = "Here are relevant documents:\n\n"
+    for doc in relevant_docs[:3]:  # Use top 3 most relevant
+        context += f"From {doc['name']}:\n"
+        context += doc['content']
+        context += "\n\n---\n\n"
+    
+    # Step 3: GENERATE - Ask AI to answer using the context
+    system_prompt = """You are a helpful assistant that answers 
+    questions based on the provided documents. 
+    Only use information from the documents. 
+    If the answer isn't in the documents, say so."""
+    
+    response = client.messages.create(
+        model="claude-opus-4-1",
+        max_tokens=1024,
+        system=system_prompt,
+        messages=[
+            {
+                "role": "user",
+                "content": f"{context}\n\nQuestion: {question}"
+            }
+        ]
+    )
+    
+    print(f"\nAnswer: {response.content[0].text}\n")
+    print("-" * 50 + "\n")</pre>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">4</span>
+                        Run Your RAG System
+                    </div>
+                    <div class="step-description">
+                        <p>First, set your API key:</p>
+                        <pre>export ANTHROPIC_API_KEY="your-api-key-here"</pre>
+                        <p style="margin-top: 12px;">Then run:</p>
+                        <pre>python simple_rag.py</pre>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">5</span>
+                        Try It Out!
+                    </div>
+                    <div class="step-description">
+                        <p>Now ask questions:</p>
+                        <div class="example-output">📚 RAG Q&A System Started!
+Ask questions about your documents (type 'quit' to exit)
+
+Your question: How many vacation days do I get after 3 years?
+
+Answer: According to the Company Handbook, after 3 years 
+of employment, you receive 20 days of vacation per year.
+
+--------------------------------------------------
+
+Your question: What are the remote work rules?
+
+Answer: Based on the Company Handbook, the remote work 
+policy states that:
+- Remote work is allowed 2 days per week
+- You must coordinate with team leads
+- Core hours from 10 AM to 3 PM are required for 
+  being online
+
+--------------------------------------------------</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🎯</span>
+                    What Just Happened?
+                </div>
+                
+                <div class="card">
+                    <p style="margin-bottom: 12px;"><strong>The RAG Process In Action:</strong></p>
+                    <ol style="padding-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                        <li style="margin-bottom: 8px;"><strong>Retrieve:</strong> Your system searched documents for keywords from your question</li>
+                        <li style="margin-bottom: 8px;"><strong>Augment:</strong> It took the relevant document sections and added them as context</li>
+                        <li style="margin-bottom: 8px;"><strong>Generate:</strong> Claude read the context and answered accurately based on actual document content</li>
+                    </ol>
+                    <p style="margin-top: 12px; color: var(--text-primary);"><strong>Result:</strong> Accurate answers that are grounded in your real documents, not hallucinated!</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="deep-dive-tab" style="display: none;">
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🔍</span>
+                    Understanding RAG Architecture
+                </div>
+                
+                <div class="card">
+                    <p style="margin-bottom: 12px;"><strong>Why RAG is Powerful</strong></p>
+                    <p style="color: var(--text-secondary); font-size: 14px;">RAG combines the strengths of search systems (finding relevant info fast) with AI (understanding and writing naturally). This creates a system that's both accurate and intelligent.</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🧩</span>
+                    Core Components Explained
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>Embeddings</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>What it is:</strong> A way to convert text into numbers that computers can compare.</p>
+                        <p style="margin-top: 12px;"><strong>Simple analogy:</strong> Imagine assigning a "fingerprint" to every sentence. Similar sentences get similar fingerprints. Then you can quickly find sentences with the same fingerprint.</p>
+                        <p style="margin-top: 12px;"><strong>Example:</strong></p>
+                        <pre>"How many vacation days?" 
+→ [0.12, -0.45, 0.89, 0.23, ...]
+
+"Vacation policy days" 
+→ [0.13, -0.44, 0.88, 0.24, ...]</pre>
+                        <p style="margin-top: 12px;">These two are similar (small differences) so the system knows they're related!</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Vector Databases</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>What it is:</strong> A database designed to store and quickly search through embeddings (those number fingerprints).</p>
+                        <p style="margin-top: 12px;"><strong>Why special?:</strong> Regular databases search by exact matches. Vector databases find similar items, which is perfect for finding relevant documents.</p>
+                        <p style="margin-top: 12px;"><strong>Popular options:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px; margin-top: 8px;">
+                            <li>Pinecone - Cloud-based, easy to use</li>
+                            <li>Weaviate - Open-source, flexible</li>
+                            <li>Chroma - Simple, great for learning</li>
+                            <li>FAISS - Facebook's library, very fast</li>
+                            <li>Milvus - Open-source, enterprise-ready</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Chunking</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>What it is:</strong> Breaking large documents into smaller pieces (chunks) before storing them.</p>
+                        <p style="margin-top: 12px;"><strong>Why needed?:</strong> A 100-page document has too much information in one chunk. You want to retrieve only the relevant section, not the whole document.</p>
+                        <p style="margin-top: 12px;"><strong>Example:</strong></p>
+                        <pre>Original: 50-page employee handbook
+
+After chunking:
+Chunk 1: Work Hours Policy (200 words)
+Chunk 2: Vacation Policy (300 words)
+Chunk 3: Remote Work Rules (250 words)
+... and so on
+
+When you ask about vacation,
+only Chunk 2 is retrieved!</pre>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Retrieval Methods</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Simple Retrieval (Keyword Search)</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;">Find documents based on keywords. Fast but sometimes misses relevant content.</p>
+                        
+                        <p style="margin-top: 12px;"><strong>Semantic Retrieval (Embedding Search)</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;">Convert question and documents to embeddings, find most similar. Slower but understands meaning.</p>
+                        
+                        <p style="margin-top: 12px;"><strong>Hybrid Retrieval</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;">Combine both methods. Best results!</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Reranking</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>What it is:</strong> A second pass to re-score retrieved documents and pick the best ones.</p>
+                        <p style="margin-top: 12px;"><strong>Why?:</strong> Your initial retrieval might bring back 100 results. A reranker scores them and returns only the top 5 most relevant.</p>
+                        <p style="margin-top: 12px;"><strong>Process:</strong></p>
+                        <pre>1. Initial Retrieval: Returns 100 documents
+2. Reranker: Scores all 100 documents
+3. Final Selection: Return top 5 best matches
+4. AI Generation: Claude answers using those 5</pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🔄</span>
+                    Complete RAG Pipeline
+                </div>
+                
+                <div class="pipeline-step">
+                    <strong>1️⃣ Document Preprocessing</strong>
+                    Load documents → Clean text → Break into chunks → Create embeddings
+                </div>
+                
+                <div class="pipeline-step">
+                    <strong>2️⃣ Indexing</strong>
+                    Store chunk embeddings in vector database with metadata
+                </div>
+                
+                <div class="pipeline-step">
+                    <strong>3️⃣ Query Processing</strong>
+                    Convert user question into embedding
+                </div>
+                
+                <div class="pipeline-step">
+                    <strong>4️⃣ Retrieval</strong>
+                    Search vector database for similar chunks
+                </div>
+                
+                <div class="pipeline-step">
+                    <strong>5️⃣ Ranking (Optional)</strong>
+                    Rerank results to get the best matches
+                </div>
+                
+                <div class="pipeline-step">
+                    <strong>6️⃣ Context Building</strong>
+                    Combine retrieved chunks with the original question
+                </div>
+                
+                <div class="pipeline-step">
+                    <strong>7️⃣ Generation</strong>
+                    Send context + question to LLM, get answer
+                </div>
+                
+                <div class="pipeline-step">
+                    <strong>8️⃣ Response</strong>
+                    Return answer to user with source references
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">⚡</span>
+                    Advanced Techniques
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>Query Expansion</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>What it does:</strong> Takes your question and rewrites it several ways to find more relevant documents.</p>
+                        <p style="margin-top: 12px;"><strong>Example:</strong></p>
+                        <pre>Original: "vacation days"
+
+Expanded versions:
+- "How many vacation days do employees get?"
+- "Time off policy"
+- "Annual leave allowance"
+- "Days off per year"</pre>
+                        <p style="margin-top: 12px;">Each version might retrieve different relevant chunks!</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Multi-Step Retrieval</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>What it does:</strong> The AI can make multiple searches, each based on what it learned from the previous search.</p>
+                        <p style="margin-top: 12px;"><strong>Example:</strong></p>
+                        <pre>Question: "What happens if I take unpaid leave?"
+
+Step 1 - Retrieve: "unpaid leave policy"
+Step 2 - Read result: Find it mentions health insurance
+Step 3 - Retrieve again: "health insurance during leave"
+Step 4 - Answer: Using both searches
+
+More comprehensive answer!</pre>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Metadata Filtering</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>What it does:</strong> Add extra information (metadata) to documents like date, author, or category, then filter by this metadata.</p>
+                        <p style="margin-top: 12px;"><strong>Example:</strong></p>
+                        <pre>Document metadata:
+{
+  "content": "vacation policy...",
+  "source": "employee_handbook.pdf",
+  "date": "2024-01-01",
+  "category": "HR_Policy",
+  "version": "2.0"
+}
+
+Filter: Only search HR_Policy documents from 2024</pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🌍</span>
+                    Real-World Applications
+                </div>
+                
+                <div class="card">
+                    <p style="margin-bottom: 12px;"><strong>Where RAG is Used:</strong></p>
+                    <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                        <li style="margin-bottom: 8px;"><strong>Customer Support:</strong> AI answers questions based on company knowledge base</li>
+                        <li style="margin-bottom: 8px;"><strong>Legal Research:</strong> Search through case law and documents instantly</li>
+                        <li style="margin-bottom: 8px;"><strong>Medical Assistance:</strong> Answer patient questions using medical literature</li>
+                        <li style="margin-bottom: 8px;"><strong>Financial Analysis:</strong> Query annual reports and market documents</li>
+                        <li style="margin-bottom: 8px;"><strong>Code Documentation:</strong> Ask questions about codebase and get accurate answers</li>
+                        <li style="margin-bottom: 8px;"><strong>Internal Wiki:</strong> Smart search over company documentation</li>
+                        <li style="margin-bottom: 8px;"><strong>Research Assistant:</strong> Find relevant papers and synthesize information</li>
+                        <li><strong>Product Support:</strong> Answer user questions using product manuals</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">❓</span>
+                    Common Questions
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>Is RAG better than fine-tuning?</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Different tools for different jobs:</strong></p>
+                        <p style="margin-top: 12px;"><strong>RAG:</strong> Best when you need to use current documents and don't want to retrain. Faster to set up.</p>
+                        <p style="margin-top: 12px;"><strong>Fine-tuning:</strong> Best when you want the model to deeply learn your domain. Takes longer, costs more.</p>
+                        <p style="margin-top: 12px;">Many projects use both together!</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>How much data do I need?</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p>RAG works with any amount of data:</p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px; margin-top: 8px;">
+                            <li>Small: 5-10 documents → Works great</li>
+                            <li>Medium: 100s of documents → Works well</li>
+                            <li>Large: Millions of documents → Still works, might need optimization</li>
+                        </ul>
+                        <p style="margin-top: 12px;">Start small, scale up gradually!</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>What about hallucinations in RAG?</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p>RAG dramatically reduces hallucinations, but doesn't eliminate them:</p>
+                        <p style="margin-top: 12px;"><strong>Regular AI:</strong> 20-30% hallucination rate</p>
+                        <p style="margin-top: 12px;"><strong>RAG AI:</strong> 2-5% hallucination rate</p>
+                        <p style="margin-top: 12px;"><strong>How to reduce further:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px; margin-top: 8px;">
+                            <li>Ask AI to cite sources</li>
+                            <li>Use reranking</li>
+                            <li>Add instructions to only use provided context</li>
+                            <li>Use retrieval confidence scores</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>How do I measure RAG quality?</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Key metrics:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px; margin-top: 8px;">
+                            <li><strong>Retrieval Precision:</strong> Are retrieved documents actually relevant? (Aim: 80%+)</li>
+                            <li><strong>Retrieval Recall:</strong> Did we find all relevant documents? (Aim: 80%+)</li>
+                            <li><strong>Answer Accuracy:</strong> Are final answers correct? (Aim: 90%+)</li>
+                            <li><strong>Source Attribution:</strong> Can answers cite where they came from?</li>
+                            <li><strong>Latency:</strong> How fast does it respond? (Aim: &lt; 2 seconds)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Can I use RAG with my own documents?</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Absolutely!</strong> That's the whole point of RAG. You can use:</p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px; margin-top: 8px;">
+                            <li>PDF files</li>
+                            <li>Word documents</li>
+                            <li>Text files</li>
+                            <li>Web pages</li>
+                            <li>Database content</li>
+                            <li>Email archives</li>
+                            <li>Slack messages</li>
+                            <li>Code files</li>
+                        </ul>
+                        <p style="margin-top: 12px;">Any text-based content can be used with RAG!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 0.5px solid var(--border);">
+            <div class="section-title">
+                <span class="section-icon">🎓</span>
+                Next Steps to Master RAG
+            </div>
+            <div class="card">
+                <ol style="padding-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                    <li style="margin-bottom: 8px;">Build the simple Q&A project above</li>
+                    <li style="margin-bottom: 8px;">Add vector embeddings using OpenAI or Hugging Face</li>
+                    <li style="margin-bottom: 8px;">Try a vector database like Pinecone or Chroma</li>
+                    <li style="margin-bottom: 8px;">Implement document chunking strategies</li>
+                    <li style="margin-bottom: 8px;">Add reranking to improve results</li>
+                    <li style="margin-bottom: 8px;">Measure your RAG system's performance</li>
+                    <li style="margin-bottom: 8px;">Explore frameworks like LangChain or LlamaIndex</li>
+                    <li>Deploy your RAG system as an API or web app</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function switchTab(tab) {
+            // Hide all tabs
+            document.getElementById('basics-tab').style.display = 'none';
+            document.getElementById('problem-tab').style.display = 'none';
+            document.getElementById('project-tab').style.display = 'none';
+            document.getElementById('deep-dive-tab').style.display = 'none';
+            
+            // Show selected tab
+            document.getElementById(tab + '-tab').style.display = 'block';
+            
+            // Update nav buttons
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        function toggleCollapsible(element) {
+            const collapsible = element;
+            const content = element.nextElementSibling;
+            
+            collapsible.classList.toggle('active');
+            content.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

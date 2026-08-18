@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cost Optimization for LLMs Guide</title>
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        /* Unique to this guide: not used by any other page */
+        .savings-box {
+            background: var(--bg-success);
+            border-left: 3px solid #639922;
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .savings-box h3 {
+            color: #639922;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .savings-box p {
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .cost-warning {
+            background: var(--bg-warning);
+            border-left: 3px solid var(--text-warning);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .cost-warning p {
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .price-highlight {
+            background: var(--bg-success);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: 500;
+            color: #639922;
+        }
+
+        /* This guide's collapsibles hold more content than the shared default */
+        .content.active {
+            max-height: 5000px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="site-nav">
+        <a href="index.html">&larr; All Guides</a>
+        <span class="site-nav-current">Cost Optimization for LLMs</span>
+    </nav>
+    <div class="container">
+        <h1>Cost Optimization for LLMs</h1>
+        <p class="subtitle">Strategies to reduce your LLM bill by 50-90% without sacrificing quality</p>
+        
+        <div class="concept-box">
+            <h3>The Goal</h3>
+            <p>Most teams waste 40-60% on LLM costs by not optimizing. This guide shows you proven techniques to cut costs significantly while maintaining or improving quality.</p>
+        </div>
+        
+        <div class="nav-tabs">
+            <div class="nav-tab active" onclick="switchTab('basics')">Basics</div>
+            <div class="nav-tab" onclick="switchTab('strategies')">Strategies</div>
+            <div class="nav-tab" onclick="switchTab('project')">Simple Project</div>
+            <div class="nav-tab" onclick="switchTab('deep-dive')">Deep Dive</div>
+        </div>
+        
+        <div id="basics-tab" style="display: block;">
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">💰</span>
+                    Understanding LLM Costs
+                </div>
+                
+                <div class="card">
+                    <p><strong>How you pay for LLMs:</strong> By tokens (not per request, not per hour)</p>
+                    <p style="margin-top: 12px; color: var(--text-secondary); font-size: 14px;"><strong>Token basics:</strong> 1 token ≈ 4 characters. Usually charged per 1,000 tokens.</p>
+                </div>
+                
+                <div style="margin-top: 16px;">
+                    <p style="color: var(--text-secondary); margin-bottom: 12px;"><strong>Typical pricing (per 1M tokens):</strong></p>
+                    
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Model</th>
+                                <th>Input Cost</th>
+                                <th>Output Cost</th>
+                                <th>Best For</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Claude 3.5 Haiku</strong></td>
+                                <td><span class="price-highlight">$0.80</span></td>
+                                <td><span class="price-highlight">$4.00</span></td>
+                                <td>Fast, cheap</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Claude 3.5 Sonnet</strong></td>
+                                <td>$3.00</td>
+                                <td>$15.00</td>
+                                <td>Best balance</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Claude 3 Opus</strong></td>
+                                <td>$15.00</td>
+                                <td>$75.00</td>
+                                <td>Most capable</td>
+                            </tr>
+                            <tr>
+                                <td><strong>GPT-4o Mini</strong></td>
+                                <td><span class="price-highlight">$0.15</span></td>
+                                <td><span class="price-highlight">$0.60</span></td>
+                                <td>Ultra cheap</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Llama 3 (AWS)</strong></td>
+                                <td><span class="price-highlight">$0.30</span></td>
+                                <td><span class="price-highlight">$0.60</span></td>
+                                <td>Open source</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="card" style="margin-top: 16px;">
+                    <p style="margin-bottom: 12px;"><strong>Total cost formula:</strong></p>
+                    <p style="color: var(--text-secondary); font-size: 14px; background: var(--surface-1); padding: 12px; border-radius: 6px; font-family: var(--font-mono);">
+                        Total Cost = (Input Tokens × Input Rate) + (Output Tokens × Output Rate)
+                    </p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">📊</span>
+                    Cost Example: The Problem
+                </div>
+                
+                <div class="cost-warning">
+                    <p><strong>Typical wasteful scenario:</strong></p>
+                    <p style="margin-top: 8px;">Using Claude 3 Opus for everything. 1M requests/month. Average 500 input tokens, 200 output tokens.</p>
+                    <p style="margin-top: 8px; color: var(--text-primary); font-weight: 500;">Cost: $500M × ($15 + $75) × (1M/1M) ≈ <span style="color: #a32d2d;">$45,000/month</span></p>
+                </div>
+                
+                <div class="savings-box">
+                    <h3>With Cost Optimization</h3>
+                    <p>Use right model for each task + caching + batching + context reduction</p>
+                    <p style="margin-top: 8px; color: var(--text-primary); font-weight: 500;">Cost: 90% reduction ≈ <span style="color: #639922;">$4,500/month</span></p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🎯</span>
+                    Four Pillars of Cost Optimization
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">1</span>
+                        Right Model Selection
+                    </div>
+                    <div class="step-description">
+                        Use cheapest model that works for the task. Haiku for simple, Sonnet for complex, Opus only when needed.
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">2</span>
+                        Token Reduction
+                    </div>
+                    <div class="step-description">
+                        Fewer tokens = lower cost. Optimize prompts, compress context, use summarization.
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">3</span>
+                        Caching & Batching
+                    </div>
+                    <div class="step-description">
+                        Reuse results (caching). Process many at once (batching). Avoid duplicate work.
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">4</span>
+                        Monitoring & Control
+                    </div>
+                    <div class="step-description">
+                        Track costs continuously. Set budgets and alerts. Identify wasteful patterns.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">⚡</span>
+                    Quick Wins (Start Here)
+                </div>
+                
+                <div class="savings-box">
+                    <h3>Quick Win #1: Right Model for Task</h3>
+                    <p>Haiku is 5x cheaper than Sonnet, 75x cheaper than Opus. For tasks like summarization, classification, extraction → Use Haiku first.</p>
+                </div>
+                
+                <div class="savings-box">
+                    <h3>Quick Win #2: Prompt Caching</h3>
+                    <p>If you use same document/system prompt repeatedly → Cache it. Save 90% on that cost. Takes 2 minutes to implement.</p>
+                </div>
+                
+                <div class="savings-box">
+                    <h3>Quick Win #3: Token Counting Before Sending</h3>
+                    <p>Count tokens before API call. Skip requests that exceed budget. Prevents runaway costs. Free to implement.</p>
+                </div>
+                
+                <div class="savings-box">
+                    <h3>Quick Win #4: Batch Processing</h3>
+                    <p>Instead of 1,000 individual API calls → 10 batch calls. Same results, 90% cheaper. Takes a few hours to refactor.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="strategies-tab" style="display: none;">
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🛠️</span>
+                    Strategy 1: Model Selection
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>Choosing the Right Model</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Haiku (Cheapest):</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">
+                            <li>Text summarization</li>
+                            <li>Classification (sentiment, category)</li>
+                            <li>Simple extraction</li>
+                            <li>Question answering (simple)</li>
+                            <li>Paraphrasing</li>
+                        </ul>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Sonnet (Best Balance):</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">
+                            <li>General purpose (most things)</li>
+                            <li>Content creation</li>
+                            <li>Code analysis</li>
+                            <li>Complex extraction</li>
+                            <li>Reasoning tasks</li>
+                        </ul>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Opus (Only When Needed):</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Very complex reasoning</li>
+                            <li>Advanced math/science</li>
+                            <li>Nuanced understanding</li>
+                            <li>Creative writing</li>
+                            <li>Legal/financial analysis</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Model Selection Decision Tree</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Start here:</strong> Use Haiku</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">Test if it works. If quality is good enough → Done. Save money.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>If Haiku doesn't work:</strong> Try Sonnet</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">9 out of 10 times Sonnet will work. Rarely need Opus.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Only use Opus if:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Sonnet consistently fails</li>
+                            <li>Task is worth the extra cost</li>
+                            <li>You're okay paying 5-10x more</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">📉</span>
+                    Strategy 2: Token Reduction
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>Optimizing Prompts</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Bad prompt (200 tokens):</strong></p>
+                        <pre>Please analyze the following document and provide me with 
+a comprehensive summary of the key points, main arguments, 
+supporting evidence, conclusions and any recommendations that 
+are mentioned in this document. I would really appreciate it if 
+you could make sure to include all the important details.</pre>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Good prompt (50 tokens):</strong></p>
+                        <pre>Summarize: key points, arguments, evidence, conclusion</pre>
+                        
+                        <p style="margin-top: 12px; margin-bottom: 12px;"><strong>Optimization tips:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Remove fluffy language</li>
+                            <li>Use bullet points not paragraphs</li>
+                            <li>Be direct and concise</li>
+                            <li>Structured output (JSON) not text</li>
+                            <li>Examples should be minimal</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Context Compression</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Problem:</strong> You have 100KB document, user asks 1 question. Full context = 25,000 tokens.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Solution 1: Extract relevant parts</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">Use search/embeddings to find relevant sections. Pass only those (2,000 tokens).</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Solution 2: Summarize first</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">Summarize large document (use cheap model). Use summary instead of full doc.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Solution 3: Hierarchical processing</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Chunk → Summary of each chunk → Summary of summaries</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Token Counting Strategies</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Before sending request:</strong> Count tokens</p>
+                        <pre>from anthropic import Anthropic
+
+client = Anthropic()
+
+# Count tokens without making request
+response = client.messages.count_tokens(
+    model="claude-3-5-haiku-20241022",
+    messages=[
+        {"role": "user", "content": "Your prompt here"}
+    ]
+)
+
+print(f"Input tokens: {response.input_tokens}")
+
+# Decision: Should we proceed?
+if response.input_tokens > 100000:
+    print("Too many tokens, skip or compress")
+else:
+    print("Safe to proceed")</pre>
+                        
+                        <p style="margin-top: 12px; color: var(--text-secondary); font-size: 14px;"><strong>Use for:</strong> Budget control, preventing runaway costs, optimizing batch sizes</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">⚡</span>
+                    Strategy 3: Prompt Caching
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>How Prompt Caching Works</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Problem:</strong> Same system prompt + document sent 1000x/day</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Solution:</strong> Cache the system prompt + document</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">First time (full cost) → Cached for 5 minutes</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">Next 999 times (90% discount)</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Cost example:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Without caching: 1000 requests × 10,000 tokens = $30</li>
+                            <li>With caching: 1 full + 999 cached = $0.30 + $3 = $3.30</li>
+                            <li>Savings: 89%</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Implementing Prompt Caching</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>What can be cached:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">
+                            <li>System prompts</li>
+                            <li>Long documents</li>
+                            <li>Instructions + examples</li>
+                            <li>Knowledge base context</li>
+                        </ul>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Implementation:</strong></p>
+                        <pre>response = client.messages.create(
+    model="claude-3-5-sonnet-20241022",
+    max_tokens=1024,
+    system=[
+        {
+            "type": "text",
+            "text": "You are a helpful assistant."
+        },
+        {
+            "type": "text",
+            "text": "[Large document here - 10,000 tokens]",
+            "cache_control": {"type": "ephemeral"}
+        }
+    ],
+    messages=[
+        {"role": "user", "content": "Question about document"}
+    ]
+)
+
+# Claude automatically caches the document
+# Next 5 minutes: 90% discount on cached content</pre>
+                        
+                        <p style="margin-top: 12px; color: var(--text-secondary); font-size: 14px;"><strong>Cache duration:</strong> 5 minutes (ephemeral) or until end of conversation</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">📦</span>
+                    Strategy 4: Batch Processing
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>Batch API Benefits</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Regular API:</strong> $30 per million input tokens</p>
+                        <p style="margin-bottom: 12px;"><strong>Batch API:</strong> $24 per million input tokens (20% discount)</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>When to use:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Processing 100+ items at once</li>
+                            <li>Not time-sensitive (up to 24h wait ok)</li>
+                            <li>Large scale operations</li>
+                        </ul>
+                        
+                        <p style="margin-top: 12px; margin-bottom: 12px;"><strong>How it works:</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Collect 1000 requests → Submit as batch → Wait for results</p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Get all results back in a few hours → Process them offline</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Batch Processing Example</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Scenario:</strong> Need to classify 10,000 support tickets</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Bad approach (expensive):</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">Send each ticket individually, one by one. Cost: $30. Takes all day.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Good approach (cheap & fast):</strong></p>
+                        <pre>import json
+
+# Prepare batch file
+requests = []
+for i, ticket in enumerate(tickets):
+    requests.append({
+        "custom_id": f"ticket-{i}",
+        "params": {
+            "model": "claude-3-5-haiku-20241022",
+            "max_tokens": 100,
+            "messages": [{
+                "role": "user",
+                "content": f"Classify this ticket: {ticket}"
+            }]
+        }
+    })
+
+# Save as JSONL (one JSON per line)
+with open('batch.jsonl', 'w') as f:
+    for req in requests:
+        f.write(json.dumps(req) + '\n')
+
+# Submit batch
+batch = client.beta.messages.batches.create(
+    requests=requests,
+    model="claude-3-5-haiku-20241022"
+)
+
+# Wait for results (async)
+# Cost: 20% cheaper
+# Results back in a few hours</pre>
+                        
+                        <p style="margin-top: 12px; color: var(--text-secondary); font-size: 14px;">Cost: $24 (20% cheaper). Results in a few hours.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">📊</span>
+                    Strategy 5: Monitoring & Budgets
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>Cost Tracking</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Track every call:</strong></p>
+                        <pre>import json
+from datetime import datetime
+
+def log_api_call(model, input_tokens, output_tokens, cost):
+    log_entry = {
+        "timestamp": datetime.now().isoformat(),
+        "model": model,
+        "input_tokens": input_tokens,
+        "output_tokens": output_tokens,
+        "cost": cost
+    }
+    
+    # Append to log file
+    with open('llm_usage.jsonl', 'a') as f:
+        f.write(json.dumps(log_entry) + '\n')
+
+# Use after every API call
+response = client.messages.create(...)
+input_tokens = response.usage.input_tokens
+output_tokens = response.usage.output_tokens
+
+# Calculate cost
+model_rates = {
+    "claude-3-5-sonnet": (0.003, 0.015),
+    "claude-3-5-haiku": (0.0008, 0.004)
+}
+
+input_rate, output_rate = model_rates["claude-3-5-haiku"]
+cost = (input_tokens * input_rate / 1000) + (output_tokens * output_rate / 1000)
+
+log_api_call("claude-3-5-haiku", input_tokens, output_tokens, cost)</pre>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Cost Analysis & Optimization</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Weekly analysis:</strong></p>
+                        <pre>import json
+from collections import defaultdict
+
+# Read logs
+costs_by_model = defaultdict(float)
+token_counts = defaultdict(int)
+
+with open('llm_usage.jsonl', 'r') as f:
+    for line in f:
+        entry = json.loads(line)
+        model = entry['model']
+        costs_by_model[model] += entry['cost']
+        token_counts[model] += entry['input_tokens'] + entry['output_tokens']
+
+# Find inefficiencies
+print("Cost breakdown:")
+for model, cost in sorted(costs_by_model.items(), key=lambda x: x[1], reverse=True):
+    tokens = token_counts[model]
+    print(f"{model}: ${cost:.2f} ({tokens:,} tokens)")
+
+# Recommendations
+total_cost = sum(costs_by_model.values())
+opus_cost = costs_by_model.get("claude-3-opus", 0)
+if opus_cost > total_cost * 0.5:
+    print(f"⚠️ You're using Opus for 50% of cost. Try Sonnet instead.")</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="project-tab" style="display: none;">
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🚀</span>
+                    Simple Project: Cost-Optimized Classifier
+                </div>
+                
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">Build a document classifier that tracks costs, uses right models, implements caching, and optimizes tokens.</p>
+                
+                <div class="concept-box">
+                    <h3>Project Goal</h3>
+                    <p>Create a classifier that reduces costs by 80% through model selection, prompt optimization, caching, and monitoring.</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">📋</span>
+                    Step-by-Step Implementation
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">1</span>
+                        Install Libraries
+                    </div>
+                    <div class="step-description">
+                        <p>Get the tools:</p>
+                        <pre>pip install anthropic python-dotenv</pre>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">2</span>
+                        Build Optimized Classifier
+                    </div>
+                    <div class="step-description">
+                        <p>Create <code>cost_optimized_classifier.py</code>:</p>
+                        <pre>from anthropic import Anthropic
+import json
+from datetime import datetime
+from collections import defaultdict
+
+client = Anthropic()
+
+# ==================== COST TRACKER ====================
+class CostTracker:
+    def __init__(self):
+        self.logs = []
+        self.costs_by_model = defaultdict(float)
+        self.token_counts = defaultdict(int)
+    
+    def log_call(self, model, input_tokens, output_tokens):
+        """Log API call and calculate cost"""
+        rates = {
+            "claude-3-5-haiku-20241022": (0.0008, 0.004),
+            "claude-3-5-sonnet-20241022": (0.003, 0.015),
+            "claude-3-opus-20250219": (0.015, 0.075)
+        }
+        
+        input_rate, output_rate = rates.get(model, (0.003, 0.015))
+        cost = (input_tokens * input_rate / 1000) + (output_tokens * output_rate / 1000)
+        
+        entry = {
+            "timestamp": datetime.now().isoformat(),
+            "model": model,
+            "input_tokens": input_tokens,
+            "output_tokens": output_tokens,
+            "cost": cost
+        }
+        
+        self.logs.append(entry)
+        self.costs_by_model[model] += cost
+        self.token_counts[model] += input_tokens + output_tokens
+    
+    def report(self):
+        """Print cost report"""
+        print("\\n" + "="*60)
+        print("💰 COST REPORT")
+        print("="*60)
+        
+        total_cost = 0
+        for model, cost in sorted(self.costs_by_model.items(), key=lambda x: x[1], reverse=True):
+            tokens = self.token_counts[model]
+            print(f"{model}: ${cost:.4f} ({tokens:,} tokens)")
+            total_cost += cost
+        
+        print(f"\\nTotal: ${total_cost:.4f}")
+        print("="*60)
+
+# ==================== OPTIMIZED CLASSIFIER ====================
+class OptimizedClassifier:
+    def __init__(self):
+        self.tracker = CostTracker()
+        self.cache = {}
+    
+    def count_tokens(self, messages, system=None):
+        """Count tokens before sending"""
+        response = client.messages.count_tokens(
+            model="claude-3-5-haiku-20241022",
+            system=system or "",
+            messages=messages
+        )
+        return response.input_tokens
+    
+    def classify_simple(self, text, categories):
+        """Classify using cheap model (Haiku)"""
+        # Optimize prompt: concise, structured output
+        prompt = f"""Classify this text into one category.
+Categories: {', '.join(categories)}
+Text: {text}
+Output: CATEGORY"""
+        
+        # Count tokens first
+        messages = [{"role": "user", "content": prompt}]
+        token_count = self.count_tokens(messages)
+        
+        # Check if too many tokens
+        if token_count > 10000:
+            return None, "Too many tokens"
+        
+        # Use cheap model for simple classification
+        response = client.messages.create(
+            model="claude-3-5-haiku-20241022",
+            max_tokens=50,  # Keep output short
+            messages=messages
+        )
+        
+        # Track cost
+        self.tracker.log_call(
+            "claude-3-5-haiku-20241022",
+            response.usage.input_tokens,
+            response.usage.output_tokens
+        )
+        
+        result = response.content[0].text.strip()
+        return result, "success"
+    
+    def classify_complex(self, text, categories, system_prompt):
+        """Classify complex using Sonnet with caching"""
+        messages = [{"role": "user", "content": f"Classify: {text}"}]
+        
+        # Use system with caching
+        response = client.messages.create(
+            model="claude-3-5-sonnet-20241022",
+            max_tokens=100,
+            system=[
+                {
+                    "type": "text",
+                    "text": system_prompt,
+                    "cache_control": {"type": "ephemeral"}
+                }
+            ],
+            messages=messages
+        )
+        
+        # Track cost (cached content is cheaper)
+        self.tracker.log_call(
+            "claude-3-5-sonnet-20241022",
+            response.usage.input_tokens,
+            response.usage.output_tokens
+        )
+        
+        return response.content[0].text.strip(), "success"
+
+# ==================== MAIN ====================
+if __name__ == "__main__":
+    print("🚀 Cost-Optimized Document Classifier\\n")
+    
+    classifier = OptimizedClassifier()
+    
+    # Categories
+    categories = ["Technology", "Sports", "Business", "Health"]
+    
+    # Test documents
+    documents = [
+        "Apple released the new iPhone with AI features",
+        "The championship game was won by a last-minute goal",
+        "Stock market hits record high amid economic growth",
+        "New study shows benefits of regular exercise",
+    ]
+    
+    # Classify using cheap model first
+    print("📊 Classifying with Haiku (cheap)...")
+    for doc in documents:
+        category, status = classifier.classify_simple(doc, categories)
+        print(f"  '{doc[:40]}...' → {category}")
+    
+    # For complex task, use Sonnet with caching
+    print("\\n📊 Classifying with Sonnet + Caching...")
+    system_prompt = """You are an expert classifier.
+Analyze text carefully and categorize it precisely.
+Consider context and nuance."""
+    
+    complex_doc = "Recent advancements in quantum computing could revolutionize technology industry"
+    
+    # First call (not cached)
+    result1, _ = classifier.classify_complex(complex_doc, categories, system_prompt)
+    print(f"  Result: {result1}")
+    
+    # Second call (cached - 90% cheaper!)
+    result2, _ = classifier.classify_complex(complex_doc, categories, system_prompt)
+    print(f"  Result (cached): {result2}")
+    
+    # Show costs
+    classifier.tracker.report()
+    
+    # Savings estimate
+    print("\\n💡 OPTIMIZATION RESULTS:")
+    print("  ✓ Used Haiku (5x cheaper than Sonnet)")
+    print("  ✓ Used caching (90% cheaper on cached calls)")
+    print("  ✓ Optimized prompts (fewer tokens)")
+    print("  ✓ Tracked every call (know where money goes)")
+    print("\\n  → Estimated savings: 70-85% vs naive implementation")</pre>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">3</span>
+                        Run Your Classifier
+                    </div>
+                    <div class="step-description">
+                        <p>Execute the script:</p>
+                        <pre>python cost_optimized_classifier.py</pre>
+                        <p style="margin-top: 12px;"><strong>You'll see:</strong></p>
+                        <div class="example-output">🚀 Cost-Optimized Document Classifier
+
+📊 Classifying with Haiku (cheap)...
+  'Apple released the new iPhone...' → Technology
+  'The championship game was won...' → Sports
+  'Stock market hits record high...' → Business
+  'New study shows benefits...' → Health
+
+📊 Classifying with Sonnet + Caching...
+  Result: Technology
+  Result (cached): Technology
+
+============================================================
+💰 COST REPORT
+============================================================
+claude-3-5-haiku-20241022: $0.0012 (400 tokens)
+claude-3-5-sonnet-20241022: $0.0048 (320 tokens)
+
+Total: $0.0060
+============================================================
+
+💡 OPTIMIZATION RESULTS:
+  ✓ Used Haiku (5x cheaper than Sonnet)
+  ✓ Used caching (90% cheaper on cached calls)
+  ✓ Optimized prompts (fewer tokens)
+  ✓ Tracked every call (know where money goes)
+
+  → Estimated savings: 70-85% vs naive implementation</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="deep-dive-tab" style="display: none;">
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🔍</span>
+                    Deep Dive: Cost Analysis
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>Cost Breakdown Example</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Scenario: Customer support chatbot, 10,000 conversations/month</strong></p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Naive approach (no optimization):</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">
+                            <li>Use Claude 3 Opus for everything</li>
+                            <li>1,000 input tokens per conversation</li>
+                            <li>200 output tokens per conversation</li>
+                            <li>Cost: 10,000 × (1,000 × $15 + 200 × $75) / 1M = $150</li>
+                        </ul>
+                        
+                        <p style="margin-bottom: 12px;"><strong>With optimization:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Use Haiku for 70% (simple questions)</li>
+                            <li>Use Sonnet for 30% (complex issues)</li>
+                            <li>Add caching (system prompt cached)</li>
+                            <li>Compress prompts (20% fewer tokens)</li>
+                            <li>Cost: 7,000 × (800 × $0.8 + 200 × $4) / 1M + 3,000 × (800 × $3 + 200 × $15) / 1M = $4.48 + $8.64 = $13.12</li>
+                        </ul>
+                        
+                        <p style="margin-top: 12px; color: #639922; font-weight: 500;">Savings: 91% ($150 → $13.12)</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Where Money Gets Wasted</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>1. Using most expensive model for everything (50% of waste)</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">Opus for classification? 75x more expensive than Haiku. Wasteful.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>2. Redundant API calls (20% of waste)</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">Same document analyzed 100x without caching. Send it once, reuse.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>3. Bloated prompts (15% of waste)</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">Unnecessary examples, flowery language, verbose instructions.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>4. Full context when partial works (10% of waste)</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Send 100KB document when 5KB relevant excerpt would work.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>5. No monitoring (5% of waste)</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Don't track costs → don't know what to optimize.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🎯</span>
+                    Deep Dive: Advanced Techniques
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>Semantic Caching</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Regular caching:</strong> Exact match only</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">If user asks "What is AI?" vs "Tell me about artificial intelligence" → Different keys → No cache hit</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Semantic caching:</strong> Match by meaning</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">Both similar questions → Same cached answer → Save 90%</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>How it works:</strong></p>
+                        <ol style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Create embeddings of questions</li>
+                            <li>Find similar questions in cache</li>
+                            <li>If similarity > 90% → Reuse cached answer</li>
+                            <li>Otherwise → Call API and cache new answer</li>
+                        </ol>
+                        
+                        <p style="margin-top: 12px; color: var(--text-secondary); font-size: 14px;"><strong>Tools:</strong> Zep, Momento, custom with embeddings</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Response Caching</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Idea:</strong> Cache model responses, not just inputs</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Example:</strong> "What is quantum computing?" asked by 1000 users/day</p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>API call 1: $0.03 (full cost)</li>
+                            <li>API calls 2-1000: $0 (cached response)</li>
+                        </ul>
+                        
+                        <p style="margin-top: 12px; margin-bottom: 12px;"><strong>Implementation:</strong></p>
+                        <pre>cache = {}
+
+def answer_question(question):
+    # Check if we have cached answer
+    if question in cache:
+        return cache[question]
+    
+    # Call API
+    response = client.messages.create(...)
+    answer = response.content[0].text
+    
+    # Cache for 24 hours
+    cache[question] = answer
+    
+    return answer</pre>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Sampling & Probabilistic Testing</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Idea:</strong> Don't evaluate everything with expensive model</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Example:</strong> Quality assurance</p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Generate 1000 responses with Haiku</li>
+                            <li>Evaluate quality with Sonnet on 10% sample (100 items)</li>
+                            <li>If quality ok → Deploy, done</li>
+                            <li>If quality bad → Adjust and retry</li>
+                        </ul>
+                        
+                        <p style="margin-top: 12px; color: var(--text-secondary); font-size: 14px;"><strong>Savings:</strong> 90% cheaper evaluation (test 10% not 100%)</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Hierarchical Processing</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Idea:</strong> Route to right model based on complexity</strong></p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Process:</strong></p>
+                        <ol style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Haiku analyzes: Is this simple or complex?</li>
+                            <li>If simple → Haiku handles it (done, cheap)</li>
+                            <li>If complex → Route to Sonnet</li>
+                            <li>Sonnet analyzes: Is this very complex?</li>
+                            <li>If very complex → Route to Opus</li>
+                        </ol>
+                        
+                        <p style="margin-top: 12px; color: var(--text-secondary); font-size: 14px;">Most requests finish at Haiku → Massive savings</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">📈</span>
+                    Cost Reduction ROI
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>Quick Win Implementation Timeline</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Week 1: Model selection (1-2 hours, save 40%)</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">Switch from Opus to Sonnet/Haiku. Immediate 40% savings.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Week 2: Prompt optimization (2-3 hours, save 10%)</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">Remove fluff, be concise. 10% fewer tokens.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Week 3: Add caching (2 hours, save 20%)</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">Cache system prompts and documents. 20% savings if repeated calls.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Week 4: Monitoring (3 hours, find 5-10%)</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Track and analyze. Find inefficiencies.</p>
+                        
+                        <p style="margin-top: 12px; font-weight: 500; color: #639922;">Total: ~10 hours work → Save $1000/month on small team 🎯</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Cost vs Quality Trade-offs</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Question: Is cheap model good enough?</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">Test it. For 80% of tasks: YES. Example: classification, extraction, simple Q&A</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>When to use expensive model?</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Complex reasoning required</li>
+                            <li>Low tolerance for errors (legal, medical)</li>
+                            <li>Creative output needed</li>
+                            <li>Cheap model consistently fails</li>
+                        </ul>
+                        
+                        <p style="margin-top: 12px; color: var(--text-secondary); font-size: 14px;"><strong>Rule of thumb:</strong> Try Haiku first. Only upgrade if it fails. 9/10 times you won't need to.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 0.5px solid var(--border);">
+            <div class="section-title">
+                <span class="section-icon">📋</span>
+                Cost Optimization Checklist
+            </div>
+            
+            <div class="card">
+                <p style="margin-bottom: 12px;"><strong>Model Selection:</strong></p>
+                <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">
+                    <li>☐ Map tasks by complexity</li>
+                    <li>☐ Try Haiku first for simple tasks</li>
+                    <li>☐ Use Sonnet for general tasks</li>
+                    <li>☐ Reserve Opus for complex reasoning</li>
+                </ul>
+                
+                <p style="margin-bottom: 12px;"><strong>Token Optimization:</strong></p>
+                <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">
+                    <li>☐ Audit prompts for fluff</li>
+                    <li>☐ Use structured output (JSON)</li>
+                    <li>☐ Count tokens before sending</li>
+                    <li>☐ Compress context (RAG, summarization)</li>
+                </ul>
+                
+                <p style="margin-bottom: 12px;"><strong>Caching & Batching:</strong></p>
+                <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">
+                    <li>☐ Implement prompt caching</li>
+                    <li>☐ Add response caching</li>
+                    <li>☐ Use batch API for bulk processing</li>
+                    <li>☐ Evaluate semantic caching</li>
+                </ul>
+                
+                <p style="margin-bottom: 12px;"><strong>Monitoring & Control:</strong></p>
+                <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                    <li>☐ Log all API calls</li>
+                    <li>☐ Track cost by model and feature</li>
+                    <li>☐ Set monthly budget and alerts</li>
+                    <li>☐ Weekly cost reviews</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 0.5px solid var(--border);">
+            <div class="section-title">
+                <span class="section-icon">🎯</span>
+                Expected Savings Summary
+            </div>
+            
+            <div class="card">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Optimization</th>
+                            <th>Implementation Time</th>
+                            <th>Cost Reduction</th>
+                            <th>Priority</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Right model selection</strong></td>
+                            <td>1-2 hours</td>
+                            <td>40-50%</td>
+                            <td>🔴 Do First</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Prompt optimization</strong></td>
+                            <td>2-3 hours</td>
+                            <td>10-15%</td>
+                            <td>🔴 Do First</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Prompt caching</strong></td>
+                            <td>2-4 hours</td>
+                            <td>10-30%</td>
+                            <td>🟡 Do Second</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Context compression</strong></td>
+                            <td>4-8 hours</td>
+                            <td>15-25%</td>
+                            <td>🟡 Do Second</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cost monitoring</strong></td>
+                            <td>3-4 hours</td>
+                            <td>5-10%</td>
+                            <td>🟡 Do Second</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Batch processing</strong></td>
+                            <td>4-8 hours</td>
+                            <td>10-20%</td>
+                            <td>🟢 Do Later</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Semantic caching</strong></td>
+                            <td>8-16 hours</td>
+                            <td>5-15%</td>
+                            <td>🟢 Do Later</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p style="margin-top: 16px; color: var(--text-secondary); font-size: 14px;"><strong>Combined impact:</strong> 70-90% cost reduction with ~20 hours of work</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function switchTab(tab) {
+            // Hide all tabs
+            document.getElementById('basics-tab').style.display = 'none';
+            document.getElementById('strategies-tab').style.display = 'none';
+            document.getElementById('project-tab').style.display = 'none';
+            document.getElementById('deep-dive-tab').style.display = 'none';
+            
+            // Show selected tab
+            document.getElementById(tab + '-tab').style.display = 'block';
+            
+            // Update nav buttons
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        function toggleCollapsible(element) {
+            const collapsible = element;
+            const content = element.nextElementSibling;
+            
+            collapsible.classList.toggle('active');
+            content.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

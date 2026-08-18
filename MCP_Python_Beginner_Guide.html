@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP in Python - Beginner Guide</title>
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        /* This guide's collapsibles/output blocks are shorter than the shared default */
+        .content.active {
+            max-height: 2000px;
+        }
+
+        .example-output {
+            max-height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="site-nav">
+        <a href="index.html">&larr; All Guides</a>
+        <span class="site-nav-current">Understanding MCP in Python</span>
+    </nav>
+    <div class="container">
+        <h1>Understanding MCP in Python</h1>
+        <p class="subtitle">A beginner's guide to the Model Context Protocol</p>
+        
+        <div class="concept-box">
+            <h3>What is MCP?</h3>
+            <p>MCP stands for "Model Context Protocol." It's like a rulebook that lets AI models (like Claude) understand and work with your tools, files, and data. Think of it as a translator between AI and your computer applications.</p>
+        </div>
+        
+        <div class="nav-tabs">
+            <div class="nav-tab active" onclick="switchTab('basics')">Basics</div>
+            <div class="nav-tab" onclick="switchTab('project')">Simple Project</div>
+            <div class="nav-tab" onclick="switchTab('deep-dive')">Deep Dive</div>
+        </div>
+        
+        <div id="basics-tab" style="display: block;">
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">📚</span>
+                    The Simple Explanation
+                </div>
+                
+                <div class="card">
+                    <p><strong>Without MCP:</strong> An AI model can only see text. It can't access your calendar, files, or run your programs.</p>
+                    <p style="margin-top: 12px;"><strong>With MCP:</strong> You give the AI a set of instructions (like a toolbox). Now it can open files, run programs, ask for information, and much more.</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🎯</span>
+                    Why Do We Need It?
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">1</span>
+                        Connect AI to Real Tools
+                    </div>
+                    <div class="step-description">AI can now use your calendar, email, code editor, or any app that supports MCP.</div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">2</span>
+                        Safe & Controlled Access
+                    </div>
+                    <div class="step-description">You decide exactly what the AI can and cannot do. It's like giving permission to specific actions.</div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">3</span>
+                        Reusable for Everyone
+                    </div>
+                    <div class="step-description">Once someone creates an MCP for a tool, anyone can use it. No need to reinvent the wheel.</div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">⚙️</span>
+                    Key Concepts (Simple Version)
+                </div>
+                
+                <div class="card">
+                    <div style="margin-bottom: 16px;">
+                        <strong style="color: var(--text-primary);">Server</strong>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 4px;">The program that offers tools (like a restaurant menu)</p>
+                    </div>
+                    <div style="margin-bottom: 16px; padding-top: 16px; border-top: 0.5px solid var(--border);">
+                        <strong style="color: var(--text-primary);">Client</strong>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 4px;">The program that uses those tools (like a customer ordering)</p>
+                    </div>
+                    <div style="padding-top: 16px; border-top: 0.5px solid var(--border);">
+                        <strong style="color: var(--text-primary);">Tools & Resources</strong>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 4px;">The actual actions the server can perform</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🔄</span>
+                    How It Works (Visual Flow)
+                </div>
+                
+                <div class="flow-diagram">
+                    <div class="flow-box" style="background: var(--bg-accent);">AI Model</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">MCP Server</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box" style="background: var(--bg-success);">Your Tools</div>
+                </div>
+                
+                <p style="color: var(--text-secondary); font-size: 14px;">The AI asks MCP for something. MCP connects to your tools and gets the answer. The AI receives the result and helps you.</p>
+            </div>
+        </div>
+        
+        <div id="project-tab" style="display: none;">
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🚀</span>
+                    Our Simple Project: A Weather Tool
+                </div>
+                
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">We'll create an MCP server that lets AI check the current weather and get weather forecasts.</p>
+                
+                <div class="concept-box">
+                    <h3>Project Goal</h3>
+                    <p>Build a Python program that: (1) Provides weather data, (2) Lets an AI client ask for weather, (3) Returns weather information back to the AI</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">📋</span>
+                    Step-by-Step Walkthrough
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">1</span>
+                        Set Up Your Computer
+                    </div>
+                    <div class="step-description">
+                        <p>First, make sure you have Python installed and the MCP library.</p>
+                        <pre>pip install mcp</pre>
+                        <p style="margin-top: 8px;">This installs the tools you need to build an MCP server.</p>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">2</span>
+                        Create a Simple MCP Server
+                    </div>
+                    <div class="step-description">
+                        <p>Create a file called <code>weather_server.py</code>:</p>
+                        <pre>from mcp.server import Server
+from mcp.types import Tool, TextContent
+
+# Create an MCP server
+server = Server("weather-server")
+
+# Define a tool for getting weather
+@server.list_tools()
+async def list_tools():
+    return [
+        Tool(
+            name="get_weather",
+            description="Get the current weather for a city",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "city": {
+                        "type": "string",
+                        "description": "City name"
+                    }
+                }
+            }
+        )
+    ]
+
+# When someone asks for weather, this runs
+@server.call_tool()
+async def call_tool(name: str, arguments: dict):
+    if name == "get_weather":
+        city = arguments.get("city")
+        # Dummy weather data (in real life, call a weather API)
+        weather_data = {
+            "London": "Rainy, 12°C",
+            "Paris": "Sunny, 18°C",
+            "Tokyo": "Cloudy, 22°C"
+        }
+        result = weather_data.get(city, "City not found")
+        return [TextContent(type="text", text=result)]</pre>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">3</span>
+                        Run Your Server
+                    </div>
+                    <div class="step-description">
+                        <p>In your terminal, run:</p>
+                        <pre>python weather_server.py</pre>
+                        <p style="margin-top: 8px;">Your MCP server is now running! It's waiting for clients to ask for weather.</p>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">4</span>
+                        Connect a Client (The AI)
+                    </div>
+                    <div class="step-description">
+                        <p>Now create a <code>weather_client.py</code> file that connects to your server:</p>
+                        <pre>import asyncio
+from mcp.client import ClientSession
+from mcp.stdio_client import StdioClientTransport
+
+async def main():
+    # Connect to the MCP server
+    transport = StdioClientTransport(
+        command="python",
+        args=["weather_server.py"]
+    )
+    
+    async with ClientSession(transport) as session:
+        # Ask the server what tools it has
+        tools = await session.list_tools()
+        print("Available tools:", [t.name for t in tools])
+        
+        # Use a tool - ask for London's weather
+        result = await session.call_tool(
+            "get_weather",
+            {"city": "London"}
+        )
+        print("Weather:", result)
+
+asyncio.run(main())</pre>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">5</span>
+                        See It In Action
+                    </div>
+                    <div class="step-description">
+                        <p>Run your client:</p>
+                        <pre>python weather_client.py</pre>
+                        <p style="margin-top: 12px;"><strong>Output:</strong></p>
+                        <div class="example-output">Available tools: ['get_weather']
+Weather: Rainy, 12°C</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">💡</span>
+                    What Just Happened?
+                </div>
+                
+                <div class="card">
+                    <ol style="padding-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                        <li style="margin-bottom: 8px;">Your <strong>server</strong> told the client "I can get weather"</li>
+                        <li style="margin-bottom: 8px;">Your <strong>client</strong> asked "Hey server, what's the weather in London?"</li>
+                        <li style="margin-bottom: 8px;">Your <strong>server</strong> looked it up and replied "Rainy, 12°C"</li>
+                        <li>The client received the answer</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        
+        <div id="deep-dive-tab" style="display: none;">
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🔍</span>
+                    Understanding the Architecture
+                </div>
+                
+                <div class="card">
+                    <p style="margin-bottom: 12px;"><strong>Client-Server Model</strong></p>
+                    <p style="color: var(--text-secondary); font-size: 14px;">MCP uses a client-server architecture. Your server offers tools, and clients use them. This is the same pattern used across the internet!</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🛠️</span>
+                    Components Explained
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>Server</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>What it is:</strong> A Python program that exposes tools and resources.</p>
+                        <p style="margin-top: 12px;"><strong>Example:</strong> Your weather server is an MCP server. It defines the "get_weather" tool.</p>
+                        <p style="margin-top: 12px;"><strong>Responsibilities:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px; margin-top: 8px;">
+                            <li>List available tools</li>
+                            <li>Handle tool calls</li>
+                            <li>Return results</li>
+                            <li>Manage permissions</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Client</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>What it is:</strong> A program that connects to an MCP server and uses its tools.</p>
+                        <p style="margin-top: 12px;"><strong>Example:</strong> Claude (the AI) can be a client. It connects to your weather server and asks for weather.</p>
+                        <p style="margin-top: 12px;"><strong>Responsibilities:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px; margin-top: 8px;">
+                            <li>Connect to servers</li>
+                            <li>Discover available tools</li>
+                            <li>Call tools when needed</li>
+                            <li>Process results</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Tools</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>What it is:</strong> Functions or actions that the server can perform.</p>
+                        <p style="margin-top: 12px;"><strong>Example:</strong> "get_weather" is a tool. It takes a city name and returns weather.</p>
+                        <p style="margin-top: 12px;"><strong>Parts of a tool definition:</strong></p>
+                        <pre>Tool(
+    name="get_weather",           # Tool ID
+    description="Get weather",    # What it does
+    inputSchema={...}             # What it needs as input
+)</pre>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Resources</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>What it is:</strong> Data or files that the server can share.</p>
+                        <p style="margin-top: 12px;"><strong>Example:</strong> A list of cities and their time zones, or a file with historical weather data.</p>
+                        <p style="margin-top: 12px;"><strong>Unlike tools:</strong> Resources are static data, not actions. Tools do things; resources provide information.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">📊</span>
+                    Request & Response Flow
+                </div>
+                
+                <div class="card">
+                    <p style="margin-bottom: 16px;"><strong>What happens when a client calls a tool:</strong></p>
+                    <div style="background: var(--surface-1); border-radius: 8px; padding: 12px; font-family: var(--font-mono); font-size: 12px; color: var(--text-primary); overflow-x: auto;">
+1. Client → Server: "I want to call get_weather with city='London'"
+
+2. Server receives request
+3. Server runs get_weather("London")
+4. Server gets result: "Rainy, 12°C"
+
+5. Server → Client: "Here's your result: Rainy, 12°C"
+
+6. Client receives and uses the result
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🔐</span>
+                    Security & Permissions
+                </div>
+                
+                <div class="card">
+                    <p style="margin-bottom: 12px;"><strong>Why it matters:</strong> You don't want the AI doing dangerous things like deleting files or accessing sensitive data.</p>
+                    
+                    <div style="margin-top: 16px; padding-top: 16px; border-top: 0.5px solid var(--border);">
+                        <p style="margin-bottom: 8px;"><strong style="color: var(--text-primary);">Control What's Exposed</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Only list tools that are safe for the AI to use. Don't expose file deletion tools unless absolutely necessary.</p>
+                    </div>
+                    
+                    <div style="margin-top: 16px; padding-top: 16px; border-top: 0.5px solid var(--border);">
+                        <p style="margin-bottom: 8px;"><strong style="color: var(--text-primary);">Validate Input</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Always check that the AI is sending valid data. Don't blindly trust what it sends.</p>
+                    </div>
+                    
+                    <div style="margin-top: 16px; padding-top: 16px; border-top: 0.5px solid var(--border);">
+                        <p style="margin-bottom: 8px;"><strong style="color: var(--text-primary);">Use Schemas</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Define exactly what input format your tools expect. This prevents misuse.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🌍</span>
+                    Real-World Examples
+                </div>
+                
+                <div class="card">
+                    <p style="margin-bottom: 12px;"><strong>What people build with MCP:</strong></p>
+                    <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                        <li>Calendar integrations (AI reads and schedules meetings)</li>
+                        <li>Email tools (AI reads and drafts emails)</li>
+                        <li>Code execution (AI runs tests and sees results)</li>
+                        <li>Database queries (AI fetches data safely)</li>
+                        <li>File management (AI reads documentation)</li>
+                        <li>API integrations (AI calls external services)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">💬</span>
+                    Common Questions
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>Is MCP the same as API?</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Simple answer:</strong> Similar, but not the same.</p>
+                        <p style="margin-top: 12px;"><strong>API</strong> = Any system for programs to talk to each other.</p>
+                        <p style="margin-top: 12px;"><strong>MCP</strong> = A specific protocol designed for AI models to understand and use tools safely.</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Can I use MCP for anything besides AI?</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p>Technically yes, but it's designed for AI. You'd be better off using regular APIs for non-AI applications. MCP's special features help AI models understand what tools do.</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>How hard is it to create an MCP server?</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Not hard at all!</strong> You saw a simple weather server in just 20 lines of code. As you build more, you can add:</p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px; margin-top: 8px;">
+                            <li>Multiple tools</li>
+                            <li>Complex logic</li>
+                            <li>Database connections</li>
+                            <li>Error handling</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Can multiple clients use the same server?</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p>Yes! Once your server is running, any number of clients can connect and use it. This is one of the biggest advantages—write once, use everywhere.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 0.5px solid var(--border);">
+            <div class="section-title">
+                <span class="section-icon">🎓</span>
+                Next Steps
+            </div>
+            <div class="card">
+                <ol style="padding-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                    <li style="margin-bottom: 8px;">Try the weather project example</li>
+                    <li style="margin-bottom: 8px;">Build your own simple MCP server (hint: try making a calculator server)</li>
+                    <li style="margin-bottom: 8px;">Check out existing MCP servers on GitHub</li>
+                    <li style="margin-bottom: 8px;">Connect your server to Claude and see what AI can do with your tools</li>
+                    <li>Explore the official MCP documentation</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function switchTab(tab) {
+            // Hide all tabs
+            document.getElementById('basics-tab').style.display = 'none';
+            document.getElementById('project-tab').style.display = 'none';
+            document.getElementById('deep-dive-tab').style.display = 'none';
+            
+            // Show selected tab
+            document.getElementById(tab + '-tab').style.display = 'block';
+            
+            // Update nav buttons
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        function toggleCollapsible(element) {
+            const collapsible = element;
+            const content = element.nextElementSibling;
+            
+            collapsible.classList.toggle('active');
+            content.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

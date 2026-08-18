@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GenAI Guides — A Practical Field Guide to Building with LLMs</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+    /* ---------- Hero ---------- */
+    .hero {
+        position: relative;
+        overflow: hidden;
+        padding: 5rem 1.5rem 6rem;
+        background:
+            radial-gradient(circle at 15% 20%, rgba(24, 95, 165, 0.25), transparent 45%),
+            radial-gradient(circle at 85% 0%, rgba(99, 153, 34, 0.18), transparent 40%),
+            radial-gradient(circle at 50% 100%, rgba(186, 117, 23, 0.12), transparent 50%),
+            linear-gradient(180deg, var(--surface-1) 0%, var(--surface-0) 100%);
+        border-bottom: 0.5px solid var(--border);
+        text-align: center;
+    }
+
+    .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--bg-accent);
+        color: var(--fill-accent);
+        border: 0.5px solid var(--border-accent);
+        border-radius: 999px;
+        padding: 6px 16px;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+        font-size: clamp(32px, 5vw, 52px);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        max-width: 820px;
+        margin: 0 auto 1rem;
+        background: linear-gradient(135deg, var(--text-primary) 40%, var(--fill-accent) 120%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .hero p {
+        color: var(--text-secondary);
+        font-size: clamp(15px, 2vw, 18px);
+        max-width: 620px;
+        margin: 0 auto 2rem;
+    }
+
+    /* ---------- Content ---------- */
+    .wrap {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    .section-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin: 3.5rem 0 1.5rem;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .section-head h2 {
+        font-size: 22px;
+        font-weight: 600;
+    }
+
+    .section-head span {
+        color: var(--text-muted);
+        font-size: 14px;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.25rem;
+        padding-bottom: 4rem;
+    }
+
+    .card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        background: var(--surface-2);
+        border: 0.5px solid var(--border);
+        border-radius: 14px;
+        padding: 1.5rem;
+        margin-bottom: 0;
+        text-decoration: none;
+        color: inherit;
+        overflow: hidden;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .card::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 4px;
+        background: var(--accent, var(--fill-accent));
+        opacity: 0.9;
+    }
+
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.10);
+        border-color: var(--border-accent);
+    }
+
+    .card-icon {
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        font-size: 22px;
+        background: color-mix(in srgb, var(--accent, var(--fill-accent)) 16%, transparent);
+    }
+
+    .card-tag {
+        position: absolute;
+        top: 1.25rem;
+        right: 1.25rem;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        background: var(--surface-1);
+        border: 0.5px solid var(--border);
+        border-radius: 999px;
+        padding: 3px 10px;
+    }
+
+    .card h3 {
+        font-size: 17px;
+        font-weight: 600;
+        margin-top: 0.25rem;
+    }
+
+    .card p {
+        color: var(--text-secondary);
+        font-size: 14px;
+        flex-grow: 1;
+    }
+
+    .card .cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--accent, var(--fill-accent));
+        margin-top: 0.25rem;
+    }
+
+    .card:hover .cta svg {
+        transform: translateX(3px);
+    }
+
+    .card .cta svg {
+        transition: transform 0.2s ease;
+    }
+
+    /* ---------- Path strip ---------- */
+    .path-strip {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        overflow-x: auto;
+        padding: 1.25rem;
+        background: var(--surface-2);
+        border: 0.5px solid var(--border);
+        border-radius: 12px;
+        margin-bottom: 1rem;
+    }
+
+    .path-node {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: var(--surface-1);
+        border: 0.5px solid var(--border);
+        font-size: 13px;
+        font-weight: 500;
+        text-decoration: none;
+        color: var(--text-primary);
+        white-space: nowrap;
+        transition: background 0.2s, border-color 0.2s;
+    }
+
+    .path-node:hover {
+        background: var(--bg-accent);
+        border-color: var(--border-accent);
+        color: var(--fill-accent);
+    }
+
+    .path-arrow {
+        flex-shrink: 0;
+        color: var(--text-muted);
+    }
+
+    /* ---------- Footer ---------- */
+    footer {
+        border-top: 0.5px solid var(--border);
+        padding: 2.5rem 1.5rem;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 13px;
+    }
+
+    @media (max-width: 640px) {
+        .hero { padding: 3.5rem 1.25rem 4rem; }
+    }
+</style>
+</head>
+<body>
+
+    <section class="hero">
+        <div class="eyebrow">📚 7 guides · beginner to practitioner</div>
+        <h1>A practical field guide to building with LLMs</h1>
+        <p>From your first RAG pipeline to running agents in production on AWS — pick a topic below and go deep, in plain English.</p>
+    </section>
+
+    <div class="wrap">
+
+        <div class="section-head">
+            <h2>Suggested learning path</h2>
+            <span>foundations → orchestration → production</span>
+        </div>
+        <div class="path-strip">
+            <a class="path-node" href="RAG_Python_Beginner_Guide.html">🔍 RAG</a>
+            <span class="path-arrow">→</span>
+            <a class="path-node" href="MCP_Python_Beginner_Guide.html">🔌 MCP</a>
+            <span class="path-arrow">→</span>
+            <a class="path-node" href="LangChain_LangGraph_LangSmith_Guide.html">🔗 LangChain</a>
+            <span class="path-arrow">→</span>
+            <a class="path-node" href="Agentic_AI_MultiAgent_Systems_Guide.html">🤖 Agentic AI</a>
+            <span class="path-arrow">→</span>
+            <a class="path-node" href="Evals_Guardrails_Observability_Guide.html">🛡️ Evals</a>
+            <span class="path-arrow">→</span>
+            <a class="path-node" href="Cost_Optimization_for_LLMs_Guide.html">💰 Cost</a>
+            <span class="path-arrow">→</span>
+            <a class="path-node" href="AWS_AI_Bedrock_SageMaker_Agents_Guide.html">☁️ AWS</a>
+        </div>
+
+        <div class="section-head">
+            <h2>All guides</h2>
+            <span>click a card to open</span>
+        </div>
+        <div class="grid">
+
+            <a class="card" style="--accent:#185fa5" href="RAG_Python_Beginner_Guide.html">
+                <span class="card-tag">Foundations</span>
+                <div class="card-icon">🔍</div>
+                <h3>Understanding RAG in Python</h3>
+                <p>A beginner's guide to Retrieval-Augmented Generation — how to ground LLMs in your own data.</p>
+                <span class="cta">Read guide <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
+
+            <a class="card" style="--accent:#639922" href="MCP_Python_Beginner_Guide.html">
+                <span class="card-tag">Foundations</span>
+                <div class="card-icon">🔌</div>
+                <h3>Understanding MCP in Python</h3>
+                <p>A beginner's guide to the Model Context Protocol — connecting LLMs to tools and data sources.</p>
+                <span class="cta">Read guide <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
+
+            <a class="card" style="--accent:#a35a2d" href="LangChain_LangGraph_LangSmith_Guide.html">
+                <span class="card-tag">Orchestration</span>
+                <div class="card-icon">🔗</div>
+                <h3>LangChain, LangGraph & LangSmith</h3>
+                <p>A beginner's guide to building, orchestrating, and monitoring LLM applications.</p>
+                <span class="cta">Read guide <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
+
+            <a class="card" style="--accent:#7a4fc9" href="Agentic_AI_MultiAgent_Systems_Guide.html">
+                <span class="card-tag">Orchestration</span>
+                <div class="card-icon">🤖</div>
+                <h3>Agentic AI & Multi-Agent Systems</h3>
+                <p>A beginner's guide to autonomous agents and how they collaborate to get work done.</p>
+                <span class="cta">Read guide <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
+
+            <a class="card" style="--accent:#a32d2d" href="Evals_Guardrails_Observability_Guide.html">
+                <span class="card-tag">Production</span>
+                <div class="card-icon">🛡️</div>
+                <h3>Evals, Guardrails & Observability</h3>
+                <p>A beginner's guide to testing, safety, and monitoring AI systems before they reach users.</p>
+                <span class="cta">Read guide <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
+
+            <a class="card" style="--accent:#b98217" href="Cost_Optimization_for_LLMs_Guide.html">
+                <span class="card-tag">Production</span>
+                <div class="card-icon">💰</div>
+                <h3>Cost Optimization for LLMs</h3>
+                <p>Strategies to reduce your LLM bill by 50-90% without sacrificing quality.</p>
+                <span class="cta">Read guide <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
+
+            <a class="card" style="--accent:#1a7a8c" href="AWS_AI_Bedrock_SageMaker_Agents_Guide.html">
+                <span class="card-tag">Production</span>
+                <div class="card-icon">☁️</div>
+                <h3>AWS AI Services Ecosystem</h3>
+                <p>A beginner's guide to Bedrock, SageMaker, Agents, and the broader AWS AI toolset.</p>
+                <span class="cta">Read guide <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
+
+        </div>
+    </div>
+
+    <footer>
+        Developed by: Sreejith C
+    </footer>
+
+</body>
+</html>

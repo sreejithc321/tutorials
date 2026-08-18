@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS AI: Bedrock, SageMaker & Agents Guide</title>
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        /* Unique to this guide: not used by any other page */
+        .aws-service {
+            background: var(--bg-info);
+            border-left: 3px solid var(--text-info);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .aws-service h3 {
+            color: var(--text-info);
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .aws-service p {
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        /* This guide's collapsibles hold more content than the shared default */
+        .content.active {
+            max-height: 4500px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="site-nav">
+        <a href="index.html">&larr; All Guides</a>
+        <span class="site-nav-current">AWS AI Services Ecosystem</span>
+    </nav>
+    <div class="container">
+        <h1>AWS AI Services Ecosystem</h1>
+        <p class="subtitle">A beginner's guide to Bedrock, SageMaker, Agents, and AWS AI tools</p>
+        
+        <div class="concept-box">
+            <h3>AWS AI Stack</h3>
+            <p><strong>Bedrock:</strong> Managed service for foundation models • <strong>Agents:</strong> Autonomous AI that uses tools • <strong>SageMaker:</strong> Full ML platform for training and deployment • <strong>Other Tools:</strong> Lambda, DynamoDB, S3 for building complete systems</p>
+        </div>
+        
+        <div class="nav-tabs">
+            <div class="nav-tab active" onclick="switchTab('basics')">Basics</div>
+            <div class="nav-tab" onclick="switchTab('services')">All Services</div>
+            <div class="nav-tab" onclick="switchTab('project')">Simple Project</div>
+            <div class="nav-tab" onclick="switchTab('deep-dive')">Deep Dive</div>
+        </div>
+        
+        <div id="basics-tab" style="display: block;">
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🛏️</span>
+                    AWS Bedrock: Foundation Models Made Easy
+                </div>
+                
+                <div class="card">
+                    <p><strong>What it is:</strong> AWS's managed service that gives you access to multiple foundation models (Claude, Llama, Mistral, Titan) without managing infrastructure.</p>
+                    <p style="margin-top: 12px; color: var(--text-secondary); font-size: 14px;"><strong>Simple analogy:</strong> Like a hotel with multiple restaurants. You pick which model to use, AWS handles everything else.</p>
+                </div>
+                
+                <div style="margin-top: 16px;">
+                    <p style="color: var(--text-secondary); margin-bottom: 12px;"><strong>Available Models:</strong></p>
+                    
+                    <div class="aws-service">
+                        <h3>Claude (Anthropic)</h3>
+                        <p>Most capable, great for reasoning and coding</p>
+                    </div>
+                    
+                    <div class="aws-service">
+                        <h3>Llama (Meta)</h3>
+                        <p>Open source, fast and efficient</p>
+                    </div>
+                    
+                    <div class="aws-service">
+                        <h3>Mistral</h3>
+                        <p>Good balance of speed and quality</p>
+                    </div>
+                    
+                    <div class="aws-service">
+                        <h3>Titan (AWS)</h3>
+                        <p>Custom AWS model, cheaper option</p>
+                    </div>
+                </div>
+                
+                <div class="card" style="margin-top: 16px;">
+                    <p style="margin-bottom: 12px;"><strong>Bedrock Features:</strong></p>
+                    <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                        <li style="margin-bottom: 8px;">🔌 <strong>Easy API</strong> - Simple REST calls to any model</li>
+                        <li style="margin-bottom: 8px;">📚 <strong>Knowledge Bases</strong> - RAG built-in</li>
+                        <li style="margin-bottom: 8px;">🤖 <strong>Agents</strong> - Autonomous behavior with tools</li>
+                        <li style="margin-bottom: 8px;">🎯 <strong>Guardrails</strong> - Content filtering and moderation</li>
+                        <li style="margin-bottom: 8px;">📊 <strong>Model Evaluation</strong> - Test and compare models</li>
+                        <li>💰 <strong>On-Demand & Batch</strong> - Pay per token or batch processing</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🤖</span>
+                    Agents for Bedrock: Autonomous AI
+                </div>
+                
+                <div class="card">
+                    <p><strong>What it is:</strong> Bedrock's built-in service for creating autonomous agents that can make decisions and use tools.</p>
+                    <p style="margin-top: 12px; color: var(--text-secondary); font-size: 14px;"><strong>Think of it as:</strong> An LLM + tool ecosystem all managed by AWS. No need for LangGraph - it's built-in.</p>
+                </div>
+                
+                <div class="flow-diagram" style="margin-top: 16px;">
+                    <div class="flow-box" style="background: var(--bg-accent);">User Request</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">Agent Reasons</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">Calls Tools</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box" style="background: var(--bg-success);">Returns Answer</div>
+                </div>
+                
+                <div class="card" style="margin-top: 16px;">
+                    <p style="margin-bottom: 12px;"><strong>What Agents Can Do:</strong></p>
+                    <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                        <li style="margin-bottom: 8px;">Call AWS services (Lambda, DynamoDB, S3)</li>
+                        <li style="margin-bottom: 8px;">Call external APIs</li>
+                        <li style="margin-bottom: 8px;">Query databases</li>
+                        <li style="margin-bottom: 8px;">Perform calculations</li>
+                        <li style="margin-bottom: 8px;">Make decisions based on data</li>
+                        <li>Loop until goal is achieved</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🧠</span>
+                    SageMaker: Full ML Platform
+                </div>
+                
+                <div class="card">
+                    <p><strong>What it is:</strong> AWS's comprehensive machine learning platform. Train custom models, deploy, monitor, and scale.</p>
+                    <p style="margin-top: 12px; color: var(--text-secondary); font-size: 14px;"><strong>When to use:</strong> When you need to train custom models or have specific requirements Bedrock doesn't support.</p>
+                </div>
+                
+                <div style="margin-top: 16px;">
+                    <p style="color: var(--text-secondary); margin-bottom: 12px;"><strong>SageMaker Capabilities:</strong></p>
+                    
+                    <div class="aws-service">
+                        <h3>SageMaker Studio</h3>
+                        <p>Full development environment for ML. Notebooks, code, experiments.</p>
+                    </div>
+                    
+                    <div class="aws-service">
+                        <h3>Training</h3>
+                        <p>Train custom models on your data. Auto-scaling compute.</p>
+                    </div>
+                    
+                    <div class="aws-service">
+                        <h3>Endpoints</h3>
+                        <p>Deploy models as REST APIs. Auto-scaling and monitoring.</p>
+                    </div>
+                    
+                    <div class="aws-service">
+                        <h3>Autopilot</h3>
+                        <p>Automated machine learning. Feed data, get model.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🔌</span>
+                    Supporting Services
+                </div>
+                
+                <div class="aws-service">
+                    <h3>Lambda</h3>
+                    <p>Serverless functions. Use as tools for agents. Auto-scale.</p>
+                </div>
+                
+                <div class="aws-service">
+                    <h3>DynamoDB</h3>
+                    <p>NoSQL database. Agents can read/write data.</p>
+                </div>
+                
+                <div class="aws-service">
+                    <h3>S3</h3>
+                    <p>Object storage. Store documents, data, models.</p>
+                </div>
+                
+                <div class="aws-service">
+                    <h3>CloudWatch</h3>
+                    <p>Monitoring and logging. Track agent behavior.</p>
+                </div>
+                
+                <div class="aws-service">
+                    <h3>IAM</h3>
+                    <p>Security and permissions. Control what agents can access.</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🔄</span>
+                    How They Work Together
+                </div>
+                
+                <div class="flow-diagram">
+                    <div class="flow-box" style="background: var(--bg-accent);">Bedrock</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-box">LLM access</div>
+                </div>
+                
+                <div class="flow-diagram">
+                    <div class="flow-box" style="background: var(--bg-info);">Agents</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-box">Autonomous behavior</div>
+                </div>
+                
+                <div class="flow-diagram">
+                    <div class="flow-box" style="background: var(--bg-success);">Lambda/DynamoDB</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-box">Tools & data</div>
+                </div>
+                
+                <div class="flow-diagram">
+                    <div class="flow-box" style="background: var(--bg-warning);">CloudWatch</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-box">Monitor & improve</div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="services-tab" style="display: none;">
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">📋</span>
+                    AWS AI Services Comparison
+                </div>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Purpose</th>
+                            <th>When to Use</th>
+                            <th>Complexity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Bedrock</strong></td>
+                            <td>Access foundation models</td>
+                            <td>Quick LLM integration</td>
+                            <td>Low</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Agents</strong></td>
+                            <td>Autonomous AI with tools</td>
+                            <td>Need autonomous behavior</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SageMaker</strong></td>
+                            <td>Train custom models</td>
+                            <td>Need custom ML models</td>
+                            <td>High</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Lambda</strong></td>
+                            <td>Serverless functions</td>
+                            <td>Agent tools, automation</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td><strong>DynamoDB</strong></td>
+                            <td>NoSQL database</td>
+                            <td>Agent needs to store data</td>
+                            <td>Low</td>
+                        </tr>
+                        <tr>
+                            <td><strong>S3</strong></td>
+                            <td>Object storage</td>
+                            <td>Store documents, models</td>
+                            <td>Low</td>
+                        </tr>
+                        <tr>
+                            <td><strong>CloudWatch</strong></td>
+                            <td>Monitoring</td>
+                            <td>Track agent performance</td>
+                            <td>Low</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🎯</span>
+                    Service Details & Use Cases
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>Bedrock in Detail</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>What you pay for:</strong> Input and output tokens (per million)</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Models available:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Claude 3.5 Sonnet (Most capable)</li>
+                            <li>Claude 3 Opus (Best reasoning)</li>
+                            <li>Llama 3 (Fast, open source)</li>
+                            <li>Mistral (Good balance)</li>
+                            <li>Titan Text (AWS native)</li>
+                        </ul>
+                        
+                        <p style="margin-top: 12px; margin-bottom: 12px;"><strong>Key feature: Knowledge Bases</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Upload documents → Bedrock handles RAG automatically. Query your docs with any model.</p>
+                        
+                        <p style="margin-top: 12px; margin-bottom: 12px;"><strong>Key feature: Guardrails</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Filter harmful content. Define sensitive topics. Block certain outputs.</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Agents for Bedrock in Detail</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>How it works:</strong></p>
+                        <ol style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li style="margin-bottom: 8px;">Define tools (what agent can do)</li>
+                            <li style="margin-bottom: 8px;">Create agent (specify model and tools)</li>
+                            <li style="margin-bottom: 8px;">Invoke agent (pass task)</li>
+                            <li>Agent autonomously uses tools until done</li>
+                        </ol>
+                        
+                        <p style="margin-top: 12px; margin-bottom: 12px;"><strong>Tool types:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>AWS service tools (Lambda, DynamoDB, S3)</li>
+                            <li>API tools (Call any REST API)</li>
+                            <li>Database tools (Query databases)</li>
+                            <li>Custom tools (Your functions)</li>
+                        </ul>
+                        
+                        <p style="margin-top: 12px; margin-bottom: 12px;"><strong>Pricing:</strong> Per invocation + tokens used</p>
+                        
+                        <p style="color: var(--text-secondary); font-size: 14px;">Agent handles looping automatically. You only pay for tokens used.</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>SageMaker in Detail</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Use SageMaker if:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Training custom models on proprietary data</li>
+                            <li>Need fine-tuning of foundation models</li>
+                            <li>Building ML pipelines</li>
+                            <li>Need A/B testing and model comparison</li>
+                            <li>Have regulatory requirements</li>
+                        </ul>
+                        
+                        <p style="margin-top: 12px; margin-bottom: 12px;"><strong>SageMaker Components:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li><strong>Studio:</strong> Jupyter notebook environment</li>
+                            <li><strong>Training Jobs:</strong> Run on managed infrastructure</li>
+                            <li><strong>Processing Jobs:</strong> Data processing at scale</li>
+                            <li><strong>Endpoints:</strong> Deploy as REST API</li>
+                            <li><strong>Pipelines:</strong> Automate ML workflows</li>
+                        </ul>
+                        
+                        <p style="margin-top: 12px; margin-bottom: 12px;"><strong>Pricing:</strong> Per compute hour + storage</p>
+                        
+                        <p style="color: var(--text-secondary); font-size: 14px;">More expensive than Bedrock but full control over training and deployment</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Supporting AWS Services</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>AWS Lambda:</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">Serverless functions. Perfect as agent tools. Auto-scales. Pay per execution.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>DynamoDB:</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">NoSQL database. Agents can read/write. Fast, scalable. Per-request billing.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>S3:</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">Object storage. Store documents for RAG. Models. Data. Pay per GB stored.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>CloudWatch:</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">Monitoring and logging. See agent actions. Track performance. Debug issues.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>IAM:</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Access control. Define what agents can do. Security best practice.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="project-tab" style="display: none;">
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🚀</span>
+                    Simple Project: Expense Analyzer Agent
+                </div>
+                
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">Build an agent that analyzes business expenses, stores them in DynamoDB, and provides insights. Uses Bedrock for intelligence.</p>
+                
+                <div class="concept-box">
+                    <h3>Project Goal</h3>
+                    <p>Create an AWS Agent that can store expenses, categorize them, and provide spending analysis. Use Bedrock for intelligence, Lambda for tools, DynamoDB for storage.</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">📋</span>
+                    Step-by-Step Implementation
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">1</span>
+                        Install AWS Libraries
+                    </div>
+                    <div class="step-description">
+                        <p>Get the SDK:</p>
+                        <pre>pip install boto3 python-dotenv</pre>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">2</span>
+                        Set Up AWS Credentials
+                    </div>
+                    <div class="step-description">
+                        <p>Configure AWS CLI:</p>
+                        <pre>aws configure
+# Enter: Access Key ID, Secret Key, Region (us-east-1)</pre>
+                        <p style="margin-top: 12px; color: var(--text-secondary); font-size: 14px;">Or set environment variables:</p>
+                        <pre>export AWS_ACCESS_KEY_ID="your-key"
+export AWS_SECRET_ACCESS_KEY="your-secret"
+export AWS_DEFAULT_REGION="us-east-1"</pre>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">3</span>
+                        Build Agent System
+                    </div>
+                    <div class="step-description">
+                        <p>Create <code>expense_agent.py</code>:</p>
+                        <pre>import boto3
+import json
+from datetime import datetime
+import re
+
+# ==================== AWS CLIENTS ====================
+bedrock = boto3.client('bedrock-runtime', region_name='us-east-1')
+dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
+
+# Table name
+TABLE_NAME = 'expenses'
+
+# Create table if needed (run once)
+def create_table():
+    """Create DynamoDB table for expenses"""
+    try:
+        table = dynamodb.create_table(
+            TableName=TABLE_NAME,
+            KeySchema=[
+                {'AttributeName': 'expense_id', 'KeyType': 'HASH'}
+            ],
+            AttributeDefinitions=[
+                {'AttributeName': 'expense_id', 'AttributeType': 'S'}
+            ],
+            BillingMode='PAY_PER_REQUEST'
+        )
+        table.wait_until_exists()
+        print(f"✅ Table {TABLE_NAME} created")
+    except Exception as e:
+        print(f"⚠️ Table already exists or error: {e}")
+
+# ==================== TOOLS ====================
+class ExpenseTools:
+    """Tools that the agent can use"""
+    
+    @staticmethod
+    def add_expense(amount: float, category: str, description: str) -> dict:
+        """Add expense to DynamoDB"""
+        expense_id = f"exp_{datetime.now().timestamp()}"
+        
+        table = dynamodb.Table(TABLE_NAME)
+        table.put_item(Item={
+            'expense_id': expense_id,
+            'amount': amount,
+            'category': category,
+            'description': description,
+            'date': datetime.now().isoformat()
+        })
+        
+        return {
+            "success": True,
+            "expense_id": expense_id,
+            "message": f"Added ${amount} expense for {category}"
+        }
+    
+    @staticmethod
+    def get_expenses() -> dict:
+        """Get all expenses from DynamoDB"""
+        table = dynamodb.Table(TABLE_NAME)
+        response = table.scan()
+        items = response.get('Items', [])
+        
+        total = sum(item.get('amount', 0) for item in items)
+        
+        return {
+            "success": True,
+            "expenses": items,
+            "count": len(items),
+            "total": total
+        }
+    
+    @staticmethod
+    def analyze_expenses() -> dict:
+        """Analyze spending by category"""
+        table = dynamodb.Table(TABLE_NAME)
+        response = table.scan()
+        items = response.get('Items', [])
+        
+        # Group by category
+        by_category = {}
+        for item in items:
+            cat = item.get('category', 'Other')
+            amt = item.get('amount', 0)
+            by_category[cat] = by_category.get(cat, 0) + amt
+        
+        return {
+            "success": True,
+            "by_category": by_category,
+            "highest_category": max(by_category, key=by_category.get) if by_category else "None"
+        }
+
+# ==================== AGENT ====================
+class ExpenseAgent:
+    """Simple expense agent using Bedrock"""
+    
+    def __init__(self):
+        self.tools = {
+            "add_expense": ExpenseTools.add_expense,
+            "get_expenses": ExpenseTools.get_expenses,
+            "analyze_expenses": ExpenseTools.analyze_expenses
+        }
+        self.conversation = []
+    
+    def call_bedrock(self, prompt: str) -> str:
+        """Call Claude via Bedrock"""
+        self.conversation.append({
+            "role": "user",
+            "content": prompt
+        })
+        
+        # Create system prompt that tells Claude about available tools
+        system_prompt = """You are an expense manager agent. You help track and analyze expenses.
+
+Available tools:
+1. add_expense(amount, category, description) - Add a new expense
+2. get_expenses() - See all expenses
+3. analyze_expenses() - Get spending analysis by category
+
+When user asks about expenses, use these tools to help them.
+After using a tool, explain the results to the user.
+Output format: First, show what tool you'll use. Then execute it.
+Format: <tool_name: add_expense, amount: 50, category: food, description: lunch>"""
+        
+        response = bedrock.invoke_model(
+            modelId='anthropic.claude-3-5-sonnet-20241022',
+            contentType='application/json',
+            accept='application/json',
+            body=json.dumps({
+                'system': system_prompt,
+                'messages': self.conversation,
+                'max_tokens': 1024
+            })
+        )
+        
+        result = json.loads(response['body'].read().decode())
+        assistant_message = result['content'][0]['text']
+        
+        self.conversation.append({
+            "role": "assistant",
+            "content": assistant_message
+        })
+        
+        return assistant_message
+    
+    def process_request(self, user_request: str) -> str:
+        """Process user request and execute tools"""
+        print(f"\\n👤 User: {user_request}")
+        
+        # Get Claude's response
+        response = self.call_bedrock(user_request)
+        print(f"\\n🤖 Agent: {response}")
+        
+        # Extract and execute tools
+        self._execute_tools(response)
+        
+        return response
+    
+    def _execute_tools(self, response: str):
+        """Parse response and execute tools if mentioned"""
+        # Simple parsing for tool calls
+        if "add_expense" in response.lower():
+            # Extract numbers and text
+            numbers = re.findall(r'\\d+(?:\\.\\d+)?', response)
+            words = response.split()
+            
+            if numbers:
+                amount = float(numbers[0])
+                category = "general"
+                description = "expense"
+                
+                # Try to guess category
+                for word in words:
+                    if word.lower() in ['food', 'lunch', 'dinner', 'breakfast']:
+                        category = "food"
+                    elif word.lower() in ['uber', 'taxi', 'flight']:
+                        category = "transport"
+                
+                result = ExpenseTools.add_expense(amount, category, description)
+                print(f"   ✅ Tool result: {result['message']}")
+        
+        elif "get_expenses" in response.lower() or "show expenses" in response.lower():
+            result = ExpenseTools.get_expenses()
+            print(f"   ✅ Found {result['count']} expenses, total: ${result['total']}")
+        
+        elif "analyze" in response.lower():
+            result = ExpenseTools.analyze_expenses()
+            print(f"   ✅ Top category: {result['highest_category']}")
+
+# ==================== MAIN ====================
+if __name__ == "__main__":
+    print("💰 AWS Bedrock Expense Agent\\n")
+    
+    # Set up
+    create_table()
+    
+    # Create agent
+    agent = ExpenseAgent()
+    
+    # Test interactions
+    requests = [
+        "Add a $50 expense for lunch",
+        "Add a $100 Uber ride",
+        "Show me all my expenses",
+        "What category am I spending the most on?"
+    ]
+    
+    for request in requests:
+        agent.process_request(request)
+        print("-" * 60)
+    
+    print("\\n✨ Agent completed all tasks!")</pre>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">4</span>
+                        Run Your Agent
+                    </div>
+                    <div class="step-description">
+                        <p>Execute the script:</p>
+                        <pre>python expense_agent.py</pre>
+                        <p style="margin-top: 12px;"><strong>You'll see:</strong></p>
+                        <div class="example-output">💰 AWS Bedrock Expense Agent
+
+✅ Table expenses created
+
+👤 User: Add a $50 expense for lunch
+🤖 Agent: I'll add this expense for you.
+   ✅ Tool result: Added $50 expense for food
+
+────────────────────────────────────────────────────
+
+👤 User: Add a $100 Uber ride
+🤖 Agent: I'll add this transportation expense.
+   ✅ Tool result: Added $100 expense for transport
+
+────────────────────────────────────────────────────
+
+👤 User: Show me all my expenses
+🤖 Agent: Here are your expenses:
+1. $50 for lunch (food)
+2. $100 for Uber (transport)
+   ✅ Found 2 expenses, total: $150
+
+────────────────────────────────────────────────────
+
+👤 User: What category am I spending the most on?
+🤖 Agent: Based on your spending, transport is your highest category at $100
+   ✅ Top category: transport
+
+────────────────────────────────────────────────────
+
+✨ Agent completed all tasks!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="deep-dive-tab" style="display: none;">
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🛏️</span>
+                    Bedrock Deep Dive
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>Model Selection Guide</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Claude 3.5 Sonnet:</strong> Best overall. Fast, capable, good for most tasks.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Claude 3 Opus:</strong> Most capable. Best for complex reasoning and coding. Slower, more expensive.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Llama 3:</strong> Fast and open source. Good for simple tasks. Cheaper than Claude.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Mistral:</strong> Good balance. Fast enough for real-time, capable enough for complex tasks.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Titan Text:</strong> AWS native model. Custom trained. Good for specific AWS use cases.</p>
+                        
+                        <p style="color: var(--text-secondary); font-size: 14px;"><strong>Decision matrix:</strong></p>
+                        <ul style="margin-left: 20px; margin-top: 8px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Speed critical? → Llama 3 or Mistral</li>
+                            <li>Quality critical? → Claude 3 Opus</li>
+                            <li>Cost critical? → Llama 3</li>
+                            <li>Balanced? → Claude 3.5 Sonnet (recommended)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Knowledge Bases (Bedrock RAG)</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>What it is:</strong> Built-in RAG system. Upload docs → Query with any model.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>How to use:</strong></p>
+                        <ol style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Create knowledge base in Bedrock console</li>
+                            <li>Upload documents (PDFs, docs, web pages)</li>
+                            <li>Index documents (automatic)</li>
+                            <li>Query using API</li>
+                        </ol>
+                        
+                        <p style="margin-top: 12px; margin-bottom: 12px;"><strong>Supported formats:</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">PDFs, DOCx, TXT, web pages, markdown</p>
+                        
+                        <p style="margin-top: 12px; margin-bottom: 12px;"><strong>Example query:</strong></p>
+                        <pre>response = bedrock.retrieve_and_generate(
+    input_text="What is our company policy?",
+    retrieveAndGenerateConfiguration={
+        'type': 'KNOWLEDGE_BASE',
+        'knowledgeBaseConfiguration': {
+            'knowledgeBaseId': 'your-kb-id'
+        }
+    }
+)</pre>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Guardrails: Content Safety</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>What it is:</strong> Filter harmful content, block topics, define style guidelines.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Use cases:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Block violent, sexual, or hateful content</li>
+                            <li>Prevent discussing sensitive company info</li>
+                            <li>Enforce brand voice and tone</li>
+                            <li>Compliance with regulations</li>
+                        </ul>
+                        
+                        <p style="margin-top: 12px; margin-bottom: 12px;"><strong>How it works:</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Create guardrail → Define rules → Apply to model calls</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🤖</span>
+                    Agents Deep Dive
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>Agent Architecture</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <div class="architecture-box">
+Agent Loop:
+1. User provides task
+2. Agent reads task
+3. Agent decides: should I use a tool?
+4. If yes:
+   - Pick tool
+   - Prepare input
+   - Call tool
+   - Get result
+   - Go back to step 3
+5. If no:
+   - Return final answer to user
+                        </div>
+                        
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 12px;">This loop is automatic. You just define tools and invoke the agent.</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Defining Tools</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Tool definition includes:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Tool name (what agent calls it)</li>
+                            <li>Description (when to use)</li>
+                            <li>Input schema (what parameters)</li>
+                            <li>Handler function (what it does)</li>
+                        </ul>
+                        
+                        <p style="margin-top: 12px; margin-bottom: 12px;"><strong>Example:</strong></p>
+                        <pre>tool = {
+    'name': 'get_weather',
+    'description': 'Get current weather',
+    'inputSchema': {
+        'properties': {
+            'location': {
+                'type': 'string',
+                'description': 'City name'
+            }
+        }
+    },
+    'handler': get_weather_function
+}</pre>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Agent Best Practices</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 8px;"><strong>1. Clear tool descriptions:</strong> Agent needs to understand what each tool does</p>
+                        
+                        <p style="margin-bottom: 8px;"><strong>2. Single responsibility:</strong> Each tool should do one thing well</p>
+                        
+                        <p style="margin-bottom: 8px;"><strong>3. Error handling:</strong> Tell agent what went wrong if tool fails</p>
+                        
+                        <p style="margin-bottom: 8px;"><strong>4. Max iterations:</strong> Set limit to prevent infinite loops</p>
+                        
+                        <p><strong>5. Test tools independently:</strong> Before using with agent</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🧠</span>
+                    SageMaker Deep Dive
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>When to Use SageMaker vs Bedrock</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Use Bedrock if:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">
+                            <li>Using foundation models (Claude, Llama, etc.)</li>
+                            <li>Quick integration needed</li>
+                            <li>Don't want to manage infrastructure</li>
+                            <li>Building chatbots, RAG, agents</li>
+                        </ul>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Use SageMaker if:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Training custom models on your data</li>
+                            <li>Fine-tuning foundation models</li>
+                            <li>Need specialized models (computer vision, etc.)</li>
+                            <li>Building ML pipelines</li>
+                            <li>Have data science team</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>SageMaker Training Workflow</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <div class="architecture-box">
+1. Prepare data (upload to S3)
+2. Write training script (Python)
+3. Create training job (specify instance type)
+4. AWS runs training (manages infra)
+5. Training outputs model (save to S3)
+6. Deploy model (create endpoint)
+7. Get REST API (call like any API)
+8. Monitor and scale automatically
+                        </div>
+                        
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 12px;">You focus on training logic, AWS handles infrastructure.</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>SageMaker Autopilot</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>What it is:</strong> Automated ML. Feed it data, get back best model.</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>How it works:</strong></p>
+                        <ol style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Upload CSV with training data</li>
+                            <li>Select target column</li>
+                            <li>Autopilot tries many models</li>
+                            <li>Returns best one with results</li>
+                        </ol>
+                        
+                        <p style="margin-top: 12px; margin-bottom: 12px;"><strong>Good for:</strong> Tabular data, classification, regression</p>
+                        
+                        <p style="color: var(--text-secondary); font-size: 14px;">Less control than custom training but much faster</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">💰</span>
+                    Pricing & Cost Optimization
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>Bedrock Pricing</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Model Invocation:</strong> Per 1,000 input + output tokens</p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Claude 3.5 Sonnet: ~$0.003 input / $0.015 output</li>
+                            <li>Llama 3: ~$0.00035 input / $0.00070 output</li>
+                        </ul>
+                        
+                        <p style="margin-top: 12px; margin-bottom: 12px;"><strong>Knowledge Base:</strong> Per retrieval</p>
+                        
+                        <p style="color: var(--text-secondary); font-size: 14px;"><strong>Cost tips:</strong></p>
+                        <ul style="margin-left: 20px; margin-top: 8px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Use Llama for simple tasks</li>
+                            <li>Cache prompts when possible</li>
+                            <li>Batch processing cheaper than streaming</li>
+                            <li>Monitor token usage</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>SageMaker Pricing</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Training:</strong> Per compute instance hour (varies by type)</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Hosting:</strong> Per compute instance hour for endpoint</p>
+                        
+                        <p style="margin-bottom: 12px;"><strong>Storage:</strong> Per GB in S3</p>
+                        
+                        <p style="color: var(--text-secondary); font-size: 14px;"><strong>Cost tips:</strong></p>
+                        <ul style="margin-left: 20px; margin-top: 8px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Use spot instances (70% cheaper)</li>
+                            <li>Auto-scale endpoints</li>
+                            <li>Stop unused endpoints</li>
+                            <li>Use Graviton processors when possible</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🏗️</span>
+                    Architecture Patterns
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>Pattern 1: Simple Chatbot</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <div class="architecture-box">
+User → API Gateway → Lambda
+              ↓
+         Bedrock (Claude)
+              ↓
+          Response → User
+
+Best for: FAQs, customer support, general Q&A
+Complexity: Low
+Cost: Low per call
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Pattern 2: RAG System</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <div class="architecture-box">
+User Query → Bedrock Knowledge Base
+                ↓
+       Retrieve docs → Claude reads docs
+                ↓
+      Generate answer with sources
+
+Best for: Documentation, knowledge bases
+Complexity: Medium
+Cost: Per retrieval + per token
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Pattern 3: Agent System</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <div class="architecture-box">
+User → API → Bedrock Agent
+              ↓
+         Think: What to do?
+              ↓
+    Use Tool: Lambda / DynamoDB / S3
+              ↓
+    Observe Result
+              ↓
+    Continue Loop or Return Answer
+
+Best for: Autonomous tasks, data queries
+Complexity: High
+Cost: Varies (loops use more tokens)
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Pattern 4: Custom ML Pipeline</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <div class="architecture-box">
+Data (S3) → SageMaker Training
+              ↓
+        Custom Model
+              ↓
+    Deploy to Endpoint
+              ↓
+   REST API for inference
+
+Best for: Custom models, fine-tuning
+Complexity: High
+Cost: Training + hosting
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 0.5px solid var(--border);">
+            <div class="section-title">
+                <span class="section-icon">🎓</span>
+                Quick Decision Tree
+            </div>
+            
+            <div class="card">
+                <p style="margin-bottom: 12px;"><strong>Need to use LLMs?</strong></p>
+                <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">
+                    <li style="margin-bottom: 8px;"><strong>Yes</strong> → Use Bedrock</li>
+                    <li style="margin-bottom: 8px;"><strong>No, training custom model?</strong> → Use SageMaker</li>
+                </ul>
+                
+                <p style="margin-bottom: 12px;"><strong>Need autonomy?</strong></p>
+                <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">
+                    <li style="margin-bottom: 8px;"><strong>Yes</strong> → Use Bedrock Agents</li>
+                    <li><strong>No, just responses</strong> → Just Bedrock</li>
+                </ul>
+                
+                <p style="margin-bottom: 12px;"><strong>Need to access your data?</strong></p>
+                <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                    <li><strong>Yes</strong> → Add Knowledge Base + Lambda tools</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 0.5px solid var(--border);">
+            <div class="section-title">
+                <span class="section-icon">🎓</span>
+                Complete AWS AI Stack
+            </div>
+            <div class="card">
+                <p style="margin-bottom: 12px;"><strong>Foundation:</strong> Bedrock (access to models)</p>
+                <p style="margin-bottom: 12px;"><strong>Intelligence:</strong> Agents (autonomous behavior)</p>
+                <p style="margin-bottom: 12px;"><strong>Data Access:</strong> Knowledge Bases (RAG)</p>
+                <p style="margin-bottom: 12px;"><strong>Tools:</strong> Lambda (functions), DynamoDB (data), S3 (storage)</p>
+                <p style="margin-bottom: 12px;"><strong>Custom Models:</strong> SageMaker (training, fine-tuning)</p>
+                <p style="margin-bottom: 12px;"><strong>Monitoring:</strong> CloudWatch (logs), X-Ray (tracing)</p>
+                <p><strong>Security:</strong> IAM (permissions), KMS (encryption)</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function switchTab(tab) {
+            // Hide all tabs
+            document.getElementById('basics-tab').style.display = 'none';
+            document.getElementById('services-tab').style.display = 'none';
+            document.getElementById('project-tab').style.display = 'none';
+            document.getElementById('deep-dive-tab').style.display = 'none';
+            
+            // Show selected tab
+            document.getElementById(tab + '-tab').style.display = 'block';
+            
+            // Update nav buttons
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        function toggleCollapsible(element) {
+            const collapsible = element;
+            const content = element.nextElementSibling;
+            
+            collapsible.classList.toggle('active');
+            content.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

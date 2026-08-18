@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evals, Guardrails & Observability Guide</title>
+    <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+    <nav class="site-nav">
+        <a href="index.html">&larr; All Guides</a>
+        <span class="site-nav-current">Evals, Guardrails & Observability</span>
+    </nav>
+    <div class="container">
+        <h1>Evals, Guardrails & Observability</h1>
+        <p class="subtitle">A beginner's guide to testing, safety, and monitoring AI systems</p>
+        
+        <div class="concept-box">
+            <h3>What are These Three?</h3>
+            <p><strong>Evals:</strong> Testing AI systems to measure quality and accuracy • <strong>
+                <br>Guardrails:</strong> Preventing unwanted outputs and ensuring safety • <strong><br>Observability:</strong> Monitoring and understanding what your AI system is doing</p>
+        </div>
+        
+        <div class="nav-tabs">
+            <div class="nav-tab active" onclick="switchTab('basics')">Basics</div>
+            <div class="nav-tab" onclick="switchTab('problems')">The Problems</div>
+            <div class="nav-tab" onclick="switchTab('project')">Simple Project</div>
+            <div class="nav-tab" onclick="switchTab('deep-dive')">Deep Dive</div>
+        </div>
+        
+        <div id="basics-tab" style="display: block;">
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">✅</span>
+                    Evals: Testing AI Quality
+                </div>
+                
+                <div class="card">
+                    <p><strong>What it is:</strong> Evals are tests that measure how well your AI system works.</p>
+                    <p style="margin-top: 12px; color: var(--text-secondary); font-size: 14px;"><strong>Simple analogy:</strong> Just like you test software for bugs, you test AI systems to measure accuracy, safety, and quality.</p>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">1</span>
+                        You Create Test Cases
+                    </div>
+                    <div class="step-description">Write examples of what your AI should do: input and expected output.</div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">2</span>
+                        Run Tests
+                    </div>
+                    <div class="step-description">Give the AI the test inputs and see what it outputs.</div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">3</span>
+                        Compare Results
+                    </div>
+                    <div class="step-description">Check if actual output matches expected output. Score the system.</div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🛡️</span>
+                    Guardrails: Preventing Bad Outputs
+                </div>
+                
+                <div class="card">
+                    <p><strong>What it is:</strong> Rules that prevent your AI from saying inappropriate, unsafe, or harmful things.</p>
+                    <p style="margin-top: 12px; color: var(--text-secondary); font-size: 14px;"><strong>Simple analogy:</strong> Like traffic guardrails keep cars on the road, AI guardrails keep AI responses within safe boundaries.</p>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">1</span>
+                        Define Rules
+                    </div>
+                    <div class="step-description">Decide what the AI should NEVER output (violence, hate speech, etc.)</div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">2</span>
+                        Check Outputs
+                    </div>
+                    <div class="step-description">Before showing response to user, scan it against the rules.</div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">3</span>
+                        Block or Flag
+                    </div>
+                    <div class="step-description">Either block the output or flag it for human review.</div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">👁️</span>
+                    Observability: Seeing What's Happening
+                </div>
+                
+                <div class="card">
+                    <p><strong>What it is:</strong> Tools and practices that let you see, log, and understand everything your AI system does.</p>
+                    <p style="margin-top: 12px; color: var(--text-secondary); font-size: 14px;"><strong>Simple analogy:</strong> Like a car dashboard shows you engine temperature and speed, observability shows you what your AI is thinking and doing.</p>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">1</span>
+                        Collect Data
+                    </div>
+                    <div class="step-description">Log user inputs, AI outputs, latency, errors, costs, etc.</div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">2</span>
+                        Analyze Patterns
+                    </div>
+                    <div class="step-description">Look for trends, failures, or unusual behavior.</div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">3</span>
+                        Debug Issues
+                    </div>
+                    <div class="step-description">When something goes wrong, trace back and find the root cause.</div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🔄</span>
+                    How They Work Together
+                </div>
+                
+                <div class="flow-diagram">
+                    <div class="flow-box" style="background: var(--bg-success);">AI System</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box" style="background: var(--bg-warning);">Guardrails</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">Output</div>
+                </div>
+                
+                <div style="margin-top: 24px;">
+                    <div class="flow-diagram">
+                        <div class="flow-box">Evals</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">Score Quality</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box" style="background: var(--bg-success);">Improve System</div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 24px;">
+                    <div class="flow-diagram">
+                        <div class="flow-box">All Activity</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">Observability</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">Dashboard</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="problems-tab" style="display: none;">
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">❓</span>
+                    What Problems Do These Solve?
+                </div>
+                
+                <div class="warning-box">
+                    <p><strong>Without Evals:</strong> You don't know if your AI is actually working well. You're flying blind!</p>
+                </div>
+                
+                <div class="warning-box">
+                    <p><strong>Without Guardrails:</strong> Your AI might accidentally say offensive, dangerous, or completely wrong things to users.</p>
+                </div>
+                
+                <div class="warning-box">
+                    <p><strong>Without Observability:</strong> When something breaks, you have no idea why. Finding bugs becomes nearly impossible.</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">📊</span>
+                    Real-World Scenarios
+                </div>
+                
+                <div class="card">
+                    <p style="margin-bottom: 12px;"><strong>Scenario 1: Customer Support Bot</strong></p>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">🔴 <strong>Without protections:</strong> Bot hallucinates refund policies, tells customers wrong information</p>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">🟢 <strong>With protections:</strong> Evals ensure accuracy, guardrails prevent wrong info, observability catches issues</p>
+                </div>
+                
+                <div class="card">
+                    <p style="margin-bottom: 12px;"><strong>Scenario 2: Content Moderation System</strong></p>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">🔴 <strong>Without protections:</strong> AI generates hate speech, inappropriate content goes live</p>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">🟢 <strong>With protections:</strong> Guardrails block harmful outputs, observability logs all activity</p>
+                </div>
+                
+                <div class="card">
+                    <p style="margin-bottom: 12px;"><strong>Scenario 3: Medical AI Assistant</strong></p>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">🔴 <strong>Without protections:</strong> AI gives medical advice that's sometimes wrong. Patients trust it blindly</p>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">🟢 <strong>With protections:</strong> Evals verify medical accuracy, guardrails add disclaimers, observability tracks errors</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">📈</span>
+                    Impact on Business
+                </div>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Without Protections</th>
+                            <th>With Protections</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>User complaints ❌</td>
+                            <td>Happy users ✅</td>
+                        </tr>
+                        <tr>
+                            <td>Low confidence in AI</td>
+                            <td>High trust in system</td>
+                        </tr>
+                        <tr>
+                            <td>Can't fix bugs</td>
+                            <td>Fast debugging</td>
+                        </tr>
+                        <tr>
+                            <td>No quality metrics</td>
+                            <td>Clear measurements</td>
+                        </tr>
+                        <tr>
+                            <td>Regulatory risks</td>
+                            <td>Compliant systems</td>
+                        </tr>
+                        <tr>
+                            <td>High costs from errors</td>
+                            <td>Cost savings</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div id="project-tab" style="display: none;">
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🚀</span>
+                    Simple Project: All Three Together
+                </div>
+                
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">We'll build a simple chatbot with evals, guardrails, and observability all working together.</p>
+                
+                <div class="concept-box">
+                    <h3>Project Goal</h3>
+                    <p>Create a system that: (1) Tests the chatbot's quality (Evals), (2) Prevents bad outputs (Guardrails), (3) Logs everything for debugging (Observability)</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">📋</span>
+                    Step-by-Step Implementation
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">1</span>
+                        Install Libraries
+                    </div>
+                    <div class="step-description">
+                        <p>Get the tools you need:</p>
+                        <pre>pip install anthropic python-dotenv</pre>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">2</span>
+                        Build the System with All Three
+                    </div>
+                    <div class="step-description">
+                        <p>Create <code>chatbot_with_protections.py</code>:</p>
+                        <pre>import json
+import logging
+from datetime import datetime
+from anthropic import Anthropic
+
+# SETUP: Observability Logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Store all interactions for observability
+interactions_log = []
+
+client = Anthropic()
+
+# ==================== GUARDRAILS ====================
+class Guardrails:
+    """Prevent bad outputs from the AI"""
+    
+    def __init__(self):
+        # List of prohibited words/phrases
+        self.blocked_patterns = [
+            "kill yourself",
+            "hate all",
+            "illegal drug",
+            "bomb",
+            "crash the market"
+        ]
+    
+    def check_output(self, text):
+        """Return True if output is safe, False if it should be blocked"""
+        text_lower = text.lower()
+        
+        for pattern in self.blocked_patterns:
+            if pattern in text_lower:
+                logger.warning(f"⚠️ BLOCKED: Output contains '{pattern}'")
+                return False
+        
+        return True
+    
+    def sanitize_output(self, text):
+        """Replace unsafe content with safe alternative"""
+        if not self.check_output(text):
+            return "I can't provide that information. Please ask something else."
+        return text
+
+# ==================== EVALS ====================
+class Evaluator:
+    """Test the quality of responses"""
+    
+    def __init__(self):
+        self.test_cases = [
+            {
+                "question": "What is 2+2?",
+                "expected_keywords": ["4"],
+                "category": "math"
+            },
+            {
+                "question": "What is Python?",
+                "expected_keywords": ["programming", "language"],
+                "category": "knowledge"
+            },
+            {
+                "question": "Explain machine learning in simple terms",
+                "expected_keywords": ["data", "learn", "pattern"],
+                "category": "explanation"
+            }
+        ]
+        self.results = []
+    
+    def evaluate_response(self, question, response):
+        """Score a response on quality"""
+        score = 0
+        max_score = 100
+        
+        # Check length (good responses aren't too short)
+        if len(response.split()) < 3:
+            feedback = "Response too short"
+            logger.info(f"📊 Eval: {feedback}")
+            return {"score": 20, "feedback": feedback, "question": question}
+        
+        # Check if it makes sense (no obvious errors)
+        if "?" in response and "." not in response:
+            score = 70
+            feedback = "Response is a question instead of answer"
+        else:
+            score = 90
+            feedback = "Good response quality"
+        
+        logger.info(f"📊 Eval: {question[:30]}... → Score: {score}/100")
+        
+        return {
+            "score": score,
+            "feedback": feedback,
+            "question": question,
+            "response": response[:100]
+        }
+    
+    def run_evals(self, chatbot_func):
+        """Run test cases against the chatbot"""
+        logger.info("🧪 Starting evaluation suite...")
+        total_score = 0
+        
+        for test in self.test_cases:
+            response = chatbot_func(test["question"])
+            result = self.evaluate_response(test["question"], response)
+            self.results.append(result)
+            total_score += result["score"]
+        
+        average_score = total_score / len(self.test_cases)
+        logger.info(f"🎯 Evaluation complete. Average: {average_score:.0f}/100")
+        
+        return {
+            "average_score": average_score,
+            "total_tests": len(self.test_cases),
+            "results": self.results
+        }
+
+# ==================== OBSERVABILITY ====================
+class Observer:
+    """Log and track system behavior"""
+    
+    def __init__(self):
+        self.events = []
+    
+    def log_interaction(self, user_input, ai_response, latency, metadata=None):
+        """Log a user-AI interaction"""
+        event = {
+            "timestamp": datetime.now().isoformat(),
+            "user_input": user_input,
+            "ai_response": ai_response[:100],
+            "latency_ms": latency,
+            "metadata": metadata or {}
+        }
+        self.events.append(event)
+        logger.info(f"📝 Interaction logged: {user_input[:30]}...")
+        
+        return event
+    
+    def get_stats(self):
+        """Get statistics about system behavior"""
+        if not self.events:
+            return {"error": "No events logged"}
+        
+        latencies = [e["latency_ms"] for e in self.events]
+        
+        return {
+            "total_interactions": len(self.events),
+            "avg_latency_ms": sum(latencies) / len(latencies),
+            "min_latency_ms": min(latencies),
+            "max_latency_ms": max(latencies),
+            "latest_5": self.events[-5:]
+        }
+    
+    def find_issues(self):
+        """Detect potential issues from logs"""
+        issues = []
+        
+        # Check for slow responses
+        slow_responses = [e for e in self.events if e["latency_ms"] > 5000]
+        if slow_responses:
+            issues.append(f"⚠️ {len(slow_responses)} slow responses detected")
+        
+        # Check for repeated failures
+        if len(self.events) > 10:
+            recent = self.events[-10:]
+            issues.append(f"ℹ️ Last 10 interactions logged")
+        
+        return issues
+
+# ==================== CHATBOT ====================
+class SafeChatbot:
+    """Chatbot with Evals, Guardrails, and Observability"""
+    
+    def __init__(self):
+        self.guardrails = Guardrails()
+        self.evaluator = Evaluator()
+        self.observer = Observer()
+        self.client = client
+    
+    def respond(self, user_input):
+        """Get a response with all protections"""
+        import time
+        start = time.time()
+        
+        try:
+            # Get response from Claude
+            response = self.client.messages.create(
+                model="claude-opus-4-1",
+                max_tokens=256,
+                messages=[{"role": "user", "content": user_input}]
+            )
+            
+            ai_response = response.content[0].text
+            latency = (time.time() - start) * 1000  # Convert to ms
+            
+            # Apply guardrails
+            safe_response = self.guardrails.sanitize_output(ai_response)
+            
+            # Log for observability
+            self.observer.log_interaction(user_input, safe_response, latency)
+            
+            return safe_response
+        
+        except Exception as e:
+            logger.error(f"❌ Error: {str(e)}")
+            return "Sorry, I encountered an error."
+    
+    def run_evals(self):
+        """Run evaluation tests"""
+        return self.evaluator.run_evals(self.respond)
+    
+    def get_status(self):
+        """Get system status and statistics"""
+        return {
+            "observability": self.observer.get_stats(),
+            "issues": self.observer.find_issues()
+        }
+
+# ==================== MAIN ====================
+if __name__ == "__main__":
+    print("🤖 Safe Chatbot with Evals, Guardrails & Observability\n")
+    
+    chatbot = SafeChatbot()
+    
+    # Example: Test the chatbot
+    print("📝 Testing chatbot...\n")
+    
+    test_questions = [
+        "What is AI?",
+        "Explain machine learning"
+    ]
+    
+    for question in test_questions:
+        response = chatbot.respond(question)
+        print(f"User: {question}")
+        print(f"Bot: {response}\n")
+    
+    # Run evaluations
+    print("\n" + "="*50)
+    print("🧪 RUNNING EVALUATIONS")
+    print("="*50 + "\n")
+    eval_results = chatbot.run_evals()
+    print(f"Average Score: {eval_results['average_score']:.0f}/100\n")
+    
+    # Show observability data
+    print("="*50)
+    print("👁️ OBSERVABILITY DASHBOARD")
+    print("="*50 + "\n")
+    status = chatbot.get_status()
+    print(f"Total interactions: {status['observability']['total_interactions']}")
+    print(f"Avg latency: {status['observability']['avg_latency_ms']:.0f}ms")
+    
+    if status['issues']:
+        print("\n⚠️ Detected Issues:")
+        for issue in status['issues']:
+            print(f"  {issue}")
+    
+    print("\n✅ System running with protections!")</pre>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">3</span>
+                        Run Your Protected System
+                    </div>
+                    <div class="step-description">
+                        <p>Set your API key and run:</p>
+                        <pre>export ANTHROPIC_API_KEY="your-key"
+python chatbot_with_protections.py</pre>
+                        <p style="margin-top: 12px;"><strong>You'll see:</strong></p>
+                        <div class="example-output">🤖 Safe Chatbot with Evals, Guardrails & Observability
+
+📝 Testing chatbot...
+
+User: What is AI?
+Bot: AI stands for Artificial Intelligence...
+
+==================================================
+🧪 RUNNING EVALUATIONS
+==================================================
+
+Average Score: 90/100
+
+==================================================
+👁️ OBSERVABILITY DASHBOARD
+==================================================
+
+Total interactions: 2
+Avg latency: 1250ms
+
+✅ System running with protections!</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🎯</span>
+                    What Just Happened?
+                </div>
+                
+                <div class="card">
+                    <p style="margin-bottom: 12px;"><strong>Evals in Action:</strong></p>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">System tested responses for quality and scored them. You can see exactly how well the AI is performing.</p>
+                    
+                    <p style="margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--border); margin-bottom: 12px;"><strong>Guardrails in Action:</strong></p>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">Every response was checked against prohibited patterns before returning to user.</p>
+                    
+                    <p style="margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--border);"><strong>Observability in Action:</strong></p>
+                    <p style="color: var(--text-secondary); font-size: 14px;">Every interaction was logged with timestamp, latency, and content. You can see exactly what happened.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="deep-dive-tab" style="display: none;">
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🔍</span>
+                    Deep Dive: Each Component
+                </div>
+                
+                <div class="card">
+                    <p style="margin-bottom: 12px;"><strong>These three systems work independently but together create a robust AI system.</strong></p>
+                    <p style="color: var(--text-secondary); font-size: 14px;">Let's explore what makes each powerful.</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">✅</span>
+                    EVALS: Measuring Quality
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>Types of Evals</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>1. Deterministic Evals</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;">Check for exact conditions. Example: "Did the response contain the answer?"</p>
+                        <pre>✓ Fast
+✓ Reliable
+✗ Limited (can't judge quality)</pre>
+                        
+                        <p style="margin-top: 12px;"><strong>2. LLM-as-Judge Evals</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;">Use another AI to judge the response. Example: "Is this response helpful?"</p>
+                        <pre>✓ Flexible
+✓ Understands nuance
+✗ Costs money
+✗ Can be subjective</pre>
+                        
+                        <p style="margin-top: 12px;"><strong>3. Human Evals</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;">Have people rate responses. The "gold standard".</p>
+                        <pre>✓ Most accurate
+✗ Slow
+✗ Expensive
+✗ Doesn't scale</pre>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Eval Metrics You Should Know</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Accuracy:</strong> Is the answer correct? (Math, facts)</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 6px; margin-bottom: 12px;">Target: 95%+</p>
+                        
+                        <p><strong>Relevance:</strong> Does the answer match the question?</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 6px; margin-bottom: 12px;">Target: 90%+</p>
+                        
+                        <p><strong>Coherence:</strong> Does the response make sense?</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 6px; margin-bottom: 12px;">Target: 95%+</p>
+                        
+                        <p><strong>Harmfulness:</strong> Does it contain harmful content?</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 6px; margin-bottom: 12px;">Target: 0%</p>
+                        
+                        <p><strong>Latency:</strong> How fast is the response?</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 6px; margin-bottom: 12px;">Target: &lt;1 second</p>
+                        
+                        <p><strong>Cost:</strong> How much does each response cost?</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 6px;">Target: Depends on your budget</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Building Good Test Cases</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Good test cases cover:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px; margin-top: 8px;">
+                            <li>Normal cases (typical usage)</li>
+                            <li>Edge cases (unusual but valid inputs)</li>
+                            <li>Error cases (invalid inputs)</li>
+                            <li>Adversarial cases (trying to trick the AI)</li>
+                        </ul>
+                        
+                        <p style="margin-top: 12px;"><strong>Example:</strong></p>
+                        <pre>Test: Summarize this article
+Normal: "Summarize CNN article about climate"
+Edge: "Summarize 500-word article"
+Error: "Summarize invalid-url.com"
+Adversarial: "Make this summary lie about the facts"</pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🛡️</span>
+                    GUARDRAILS: Preventing Bad Outputs
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>Types of Guardrails</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>1. Rule-Based Guardrails</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;">Check for specific words or patterns.</p>
+                        <pre>Example: Block if response contains "password"
+✓ Fast
+✗ Easy to bypass
+✗ Can have false positives</pre>
+                        
+                        <p style="margin-top: 12px;"><strong>2. Semantic Guardrails</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;">Use AI to understand if content is harmful.</p>
+                        <pre>Example: Use embedding to detect hateful intent
+✓ Accurate
+✓ Hard to bypass
+✗ More expensive</pre>
+                        
+                        <p style="margin-top: 12px;"><strong>3. Prompt-Based Guardrails</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;">Tell the AI upfront what it should never do.</p>
+                        <pre>Example: "Never give medical advice"
+✓ Built-in prevention
+✗ AI might ignore instructions</pre>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Common Guardrails to Implement</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Example</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Safety</strong></td>
+                                    <td>Block violence, hate speech, illegal content</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Privacy</strong></td>
+                                    <td>Don't output user emails or personal info</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Accuracy</strong></td>
+                                    <td>Flag unconfident or hallucinated responses</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Brand</strong></td>
+                                    <td>Stay professional, match company tone</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Legal</strong></td>
+                                    <td>Add disclaimers for medical/legal advice</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Bias</strong></td>
+                                    <td>Treat all groups equally and fairly</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Guardrail Best Practices</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>1. Layer your guardrails</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Don't rely on just one check. Use multiple methods (rule + semantic + prompt).</p>
+                        
+                        <p style="margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--border); margin-bottom: 12px;"><strong>2. Test them thoroughly</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Make sure your guardrails catch bad outputs and don't block good ones.</p>
+                        
+                        <p style="margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--border); margin-bottom: 12px;"><strong>3. Log violations</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Track what was blocked and why. Find patterns.</p>
+                        
+                        <p style="margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--border);"><strong>4. Make them adjustable</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Don't hard-code rules. Use a config file so you can update them without code changes.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">👁️</span>
+                    OBSERVABILITY: Seeing Everything
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>What to Log</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>User-Side Data:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>User ID (anonymized)</li>
+                            <li>Input text</li>
+                            <li>Timestamp</li>
+                            <li>User feedback (thumbs up/down)</li>
+                        </ul>
+                        
+                        <p style="margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--border); margin-bottom: 12px;"><strong>AI-Side Data:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Model used</li>
+                            <li>Output text</li>
+                            <li>Tokens used</li>
+                            <li>Confidence score</li>
+                        </ul>
+                        
+                        <p style="margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--border); margin-bottom: 12px;"><strong>System-Side Data:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Latency (how long it took)</li>
+                            <li>Cost (API charges)</li>
+                            <li>Errors that occurred</li>
+                            <li>Cache hits/misses</li>
+                        </ul>
+                        
+                        <p style="margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--border);"><strong>Safety-Side Data:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Guardrail checks performed</li>
+                            <li>Any blocks or flags</li>
+                            <li>Safety scores</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Observability Tools</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Open Source:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">
+                            <li>ELK Stack (Elasticsearch, Logstash, Kibana)</li>
+                            <li>Prometheus + Grafana</li>
+                            <li>Jaeger (for tracing)</li>
+                        </ul>
+                        
+                        <p><strong>Specialized for AI:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">
+                            <li>Langfuse - LLM observability</li>
+                            <li>Arize - ML monitoring</li>
+                            <li>Phoenix - LLM monitoring</li>
+                            <li>Galileo - LLM evaluation</li>
+                        </ul>
+                        
+                        <p><strong>Cloud Platforms:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>DataDog</li>
+                            <li>New Relic</li>
+                            <li>Splunk</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Observability Dashboard Essentials</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Real-Time Metrics:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Requests per minute</li>
+                            <li>Average response time</li>
+                            <li>Error rate</li>
+                            <li>Active users</li>
+                        </ul>
+                        
+                        <p style="margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--border); margin-bottom: 12px;"><strong>Historical Trends:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Quality over time</li>
+                            <li>Cost trends</li>
+                            <li>Popular queries</li>
+                            <li>Error patterns</li>
+                        </ul>
+                        
+                        <p style="margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--border); margin-bottom: 12px;"><strong>Alerts:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Error rate > 5%</li>
+                            <li>Latency > expected</li>
+                            <li>Cost spike</li>
+                            <li>Unusual patterns</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🔄</span>
+                    The Feedback Loop
+                </div>
+                
+                <div class="card">
+                    <p style="margin-bottom: 12px;"><strong>How they work together to improve:</strong></p>
+                    
+                    <div style="margin-top: 16px;">
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 8px;">1. <strong>Observability detects issues</strong> - "Output quality dropped 10%"</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 8px;">2. <strong>Evals pinpoint the problem</strong> - "Accuracy on question-answering dropped"</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 8px;">3. <strong>You make improvements</strong> - Change prompt, model, or guardrails</p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">4. <strong>Evals verify improvement</strong> - Run evals again, see if scores went up</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🌍</span>
+                    Real-World Deployments
+                </div>
+                
+                <div class="card">
+                    <p style="margin-bottom: 12px;"><strong>Example 1: E-Commerce Recommendation Engine</strong></p>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">✅ Evals: Test if recommendations boost sales
+<br>✅ Guardrails: Block recommendations for out-of-stock items
+<br>✅ Observability: Track click-through rates and revenue impact</p>
+                </div>
+                
+                <div class="card">
+                    <p style="margin-bottom: 12px;"><strong>Example 2: Content Moderation System</strong></p>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">✅ Evals: Measure accuracy on hate speech detection
+<br>✅ Guardrails: Block hate speech automatically
+<br>✅ Observability: Track appeals and override patterns</p>
+                </div>
+                
+                <div class="card">
+                    <p style="margin-bottom: 12px;"><strong>Example 3: Customer Support Bot</strong></p>
+                    <p style="color: var(--text-secondary); font-size: 14px;">✅ Evals: Rate response helpfulness and accuracy
+<br>✅ Guardrails: Escalate to human for sensitive topics
+<br>✅ Observability: Track escalation rates and resolution time</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">❓</span>
+                    Common Questions
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>How often should I run evals?</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>During development:</strong> Continuously, after every change</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">Use CI/CD to run them automatically</p>
+                        
+                        <p><strong>In production:</strong> Daily or weekly</p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Catch regressions before users complain</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Won't guardrails make my AI too restrictive?</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p>If guardrails are too strict, yes. That's why you should:</p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px; margin-top: 8px;">
+                            <li>Start conservative, loosen gradually</li>
+                            <li>Monitor false positive rates</li>
+                            <li>Get feedback from users</li>
+                            <li>Use confidence thresholds instead of binary blocking</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>How much does observability cost?</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Open source tools:</strong> Free, but requires setup and maintenance</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">Examples: Prometheus, ELK Stack</p>
+                        
+                        <p><strong>Cloud providers:</strong> Pay-as-you-go, typically $100-$1000/month</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">Examples: DataDog, New Relic</p>
+                        
+                        <p><strong>AI-specific tools:</strong> $50-$500/month</p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Examples: Langfuse, Arize</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Can I combine evals, guardrails, and observability?</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Absolutely! In fact, you should.</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;">They work together:</p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px; margin-top: 8px;">
+                            <li>Observability provides data</li>
+                            <li>Evals measure quality from that data</li>
+                            <li>Guardrails prevent bad outcomes</li>
+                            <li>Loop back to improve system</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 0.5px solid var(--border);">
+            <div class="section-title">
+                <span class="section-icon">🎓</span>
+                Next Steps to Master All Three
+            </div>
+            <div class="card">
+                <ol style="padding-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                    <li style="margin-bottom: 8px;">Build and run the simple project above</li>
+                    <li style="margin-bottom: 8px;">Create your own test cases for your use case</li>
+                    <li style="margin-bottom: 8px;">Implement guardrails specific to your domain</li>
+                    <li style="margin-bottom: 8px;">Set up logging for all interactions</li>
+                    <li style="margin-bottom: 8px;">Build a simple observability dashboard</li>
+                    <li style="margin-bottom: 8px;">Explore frameworks like LangSmith for evals</li>
+                    <li style="margin-bottom: 8px;">Set up automated eval runs in your CI/CD</li>
+                    <li>Deploy to production with full observability</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function switchTab(tab) {
+            // Hide all tabs
+            document.getElementById('basics-tab').style.display = 'none';
+            document.getElementById('problems-tab').style.display = 'none';
+            document.getElementById('project-tab').style.display = 'none';
+            document.getElementById('deep-dive-tab').style.display = 'none';
+            
+            // Show selected tab
+            document.getElementById(tab + '-tab').style.display = 'block';
+            
+            // Update nav buttons
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        function toggleCollapsible(element) {
+            const collapsible = element;
+            const content = element.nextElementSibling;
+            
+            collapsible.classList.toggle('active');
+            content.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

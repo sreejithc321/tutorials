@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentic AI & Multi-Agent Systems Guide</title>
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        /* Unique to this guide: not used by any other page */
+        .agent-box {
+            background: var(--bg-info);
+            border-left: 3px solid var(--text-info);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .agent-box h3 {
+            color: var(--text-info);
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .agent-box p {
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="site-nav">
+        <a href="index.html">&larr; All Guides</a>
+        <span class="site-nav-current">Agentic AI & Multi-Agent Systems</span>
+    </nav>
+    <div class="container">
+        <h1>Agentic AI & Multi-Agent Systems</h1>
+        <p class="subtitle">A beginner's guide to autonomous agents and agent collaboration</p>
+        
+        <div class="concept-box">
+            <h3>What Are We Building?</h3>
+            <p><strong>Agentic AI:</strong> AI systems that can make decisions, take actions, and use tools autonomously <br><strong>Multi-Agent Systems:</strong> Multiple agents working together, each with their own goals and abilities</p>
+        </div>
+        
+        <div class="nav-tabs">
+            <div class="nav-tab active" onclick="switchTab('basics')">Basics</div>
+            <div class="nav-tab" onclick="switchTab('problems')">The Problems</div>
+            <div class="nav-tab" onclick="switchTab('project')">Simple Project</div>
+            <div class="nav-tab" onclick="switchTab('deep-dive')">Deep Dive</div>
+        </div>
+        
+        <div id="basics-tab" style="display: block;">
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🤖</span>
+                    What Is an Agent?
+                </div>
+                
+                <div class="card">
+                    <p><strong>Simple definition:</strong> An AI system that can perceive its environment, make decisions, and take actions to achieve a goal.</p>
+                    <p style="margin-top: 12px; color: var(--text-secondary); font-size: 14px;"><strong>Real analogy:</strong> Like a robot that can see, think, and act. It doesn't just respond to questions—it actively works toward goals.</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">⚙️</span>
+                    How Agents Work
+                </div>
+                
+                <div class="flow-diagram">
+                    <div class="flow-box" style="background: var(--bg-accent);">Observe</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">Think</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">Act</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box" style="background: var(--bg-success);">Repeat</div>
+                </div>
+                
+                <div style="margin-top: 24px;">
+                    <div class="step-box">
+                        <div class="step-title">
+                            <span class="step-number">1</span>
+                            Observe
+                        </div>
+                        <div class="step-description">Agent sees the current state (user request, data, environment)</div>
+                    </div>
+                    
+                    <div class="step-box">
+                        <div class="step-title">
+                            <span class="step-number">2</span>
+                            Think
+                        </div>
+                        <div class="step-description">Agent reasons about what to do. Uses its "brain" (AI model) and past knowledge.</div>
+                    </div>
+                    
+                    <div class="step-box">
+                        <div class="step-title">
+                            <span class="step-number">3</span>
+                            Act
+                        </div>
+                        <div class="step-description">Agent uses tools to take action (call an API, write data, search the web)</div>
+                    </div>
+                    
+                    <div class="step-box">
+                        <div class="step-title">
+                            <span class="step-number">4</span>
+                            Repeat
+                        </div>
+                        <div class="step-description">Agent observes the results and decides next steps. Loop continues until goal is reached.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">👥</span>
+                    What Are Multi-Agent Systems?
+                </div>
+                
+                <div class="card">
+                    <p><strong>Simple definition:</strong> Multiple agents working together, each with their own specialized skills and goals, to solve a larger problem.</p>
+                    <p style="margin-top: 12px; color: var(--text-secondary); font-size: 14px;"><strong>Real analogy:</strong> Like a team of specialists. One writes, one edits, one designs, one publishes. Together they create better content than one person alone.</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🔄</span>
+                    Agent vs Regular AI
+                </div>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Aspect</th>
+                            <th>Regular AI</th>
+                            <th>Agent AI</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Control</strong></td>
+                            <td>User gives command</td>
+                            <td>Agent decides what to do</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Action</strong></td>
+                            <td>Only responds with text</td>
+                            <td>Takes real actions (calls APIs, writes files)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Iteration</strong></td>
+                            <td>One turn per request</td>
+                            <td>Multiple turns until goal met</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tools</strong></td>
+                            <td>No access to tools</td>
+                            <td>Can use many tools</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Planning</strong></td>
+                            <td>No planning</td>
+                            <td>Makes step-by-step plans</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Memory</strong></td>
+                            <td>Single conversation</td>
+                            <td>Can learn and remember</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🏗️</span>
+                    Agent Components
+                </div>
+                
+                <div class="agent-box">
+                    <h3>Brain (LLM)</h3>
+                    <p>The AI model that thinks and makes decisions. Usually a large language model like Claude.</p>
+                </div>
+                
+                <div class="agent-box">
+                    <h3>Memory</h3>
+                    <p>What the agent remembers. Can be short-term (current conversation) or long-term (past experiences).</p>
+                </div>
+                
+                <div class="agent-box">
+                    <h3>Tools</h3>
+                    <p>Things the agent can do. Examples: call APIs, search the web, write files, access databases.</p>
+                </div>
+                
+                <div class="agent-box">
+                    <h3>Planning</h3>
+                    <p>How the agent breaks down goals into steps. "What do I need to do first, second, third?"</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="problems-tab" style="display: none;">
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">❓</span>
+                    What Problems Do Agents Solve?
+                </div>
+                
+                <div class="warning-box">
+                    <p><strong>Problem 1: Humans have to manage everything</strong><br/>Without agents, you have to tell AI what to do step-by-step. With agents, they figure it out themselves.</p>
+                </div>
+                
+                <div class="warning-box">
+                    <p><strong>Problem 2: AI can only talk, not act</strong><br/>Regular AI just gives you suggestions. Agents can actually perform tasks and see results.</p>
+                </div>
+                
+                <div class="warning-box">
+                    <p><strong>Problem 3: Complex tasks need specialists</strong><br/>A single person can't do research, write, edit, and design. A team can. Multi-agent systems work like teams.</p>
+                </div>
+                
+                <div class="warning-box">
+                    <p><strong>Problem 4: Scaling human work</strong><br/>Agents can work 24/7 on repetitive tasks, freeing humans for creative work.</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">💡</span>
+                    Real-World Scenarios
+                </div>
+                
+                <div class="card">
+                    <p style="margin-bottom: 12px;"><strong>Scenario 1: Research Paper Writer</strong></p>
+                    <p style="color: var(--text-secondary); font-size: 14px;"><strong>Without agents:</strong> You manually: search papers, read them, extract info, write summary, check references</p>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;"><strong>With agents:</strong> Agent autonomously searches, reads, synthesizes, and writes complete paper. You just review.</p>
+                </div>
+                
+                <div class="card">
+                    <p style="margin-bottom: 12px;"><strong>Scenario 2: Software Testing</strong></p>
+                    <p style="color: var(--text-secondary); font-size: 14px;"><strong>Without agents:</strong> Testers manually click, type, verify each feature. Takes weeks.</p>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;"><strong>With agents:</strong> Multiple test agents run in parallel, testing different scenarios. Completed in hours.</p>
+                </div>
+                
+                <div class="card">
+                    <p style="margin-bottom: 12px;"><strong>Scenario 3: Customer Issue Resolution</strong></p>
+                    <p style="color: var(--text-secondary); font-size: 14px;"><strong>Without agents:</strong> Each issue needs a human to investigate, research, and solve.</p>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;"><strong>With agents:</strong> Agent investigates, checks knowledge base, calls APIs, and resolves. Escalates only when needed.</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🤝</span>
+                    Why Multi-Agent Systems?
+                </div>
+                
+                <div class="card">
+                    <p style="margin-bottom: 12px;"><strong>Specialization:</strong> Each agent is expert at one thing. Researcher agent researches. Writer agent writes. Better results than a generalist.</p>
+                    
+                    <p style="margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--border); margin-bottom: 12px;"><strong>Parallel Work:</strong> Multiple agents work at the same time. 3 agents working in parallel = 3x faster.</p>
+                    
+                    <p style="margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--border); margin-bottom: 12px;"><strong>Redundancy:</strong> If one agent fails, others continue. More robust system.</p>
+                    
+                    <p style="margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--border);"><strong>Complexity:</strong> Break huge problems into smaller ones each agent can handle.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="project-tab" style="display: none;">
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🚀</span>
+                    Simple Project: Multi-Agent Content Creator
+                </div>
+                
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">We'll build a system where multiple agents collaborate to create a blog post: Research Agent finds information, Writer Agent writes, Editor Agent checks quality.</p>
+                
+                <div class="concept-box">
+                    <h3>Project Goal</h3>
+                    <p>Build a 3-agent system where agents autonomously collaborate to create content. Each agent has tools, makes decisions, and passes work to the next agent.</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">📋</span>
+                    Step-by-Step Implementation
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">1</span>
+                        Install Libraries
+                    </div>
+                    <div class="step-description">
+                        <p>Get the tools you need:</p>
+                        <pre>pip install anthropic python-dotenv</pre>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">2</span>
+                        Build Multi-Agent System
+                    </div>
+                    <div class="step-description">
+                        <p>Create <code>content_creation_agents.py</code>:</p>
+                        <pre>from anthropic import Anthropic
+import json
+
+client = Anthropic()
+
+# ==================== AGENT BASE CLASS ====================
+class Agent:
+    """Base class for all agents"""
+    
+    def __init__(self, name, role, tools):
+        self.name = name
+        self.role = role
+        self.tools = tools
+        self.conversation_history = []
+    
+    def think(self, task):
+        """Agent thinks about what to do"""
+        system_prompt = f"""You are {self.name}, a {self.role}.
+        Your tools: {', '.join([t['name'] for t in self.tools])}
+        
+        Think step-by-step about what to do.
+        Be autonomous - make decisions without asking for permission."""
+        
+        self.conversation_history.append({
+            "role": "user",
+            "content": task
+        })
+        
+        response = client.messages.create(
+            model="claude-opus-4-1",
+            max_tokens=1024,
+            system=system_prompt,
+            messages=self.conversation_history
+        )
+        
+        thought = response.content[0].text
+        self.conversation_history.append({
+            "role": "assistant",
+            "content": thought
+        })
+        
+        return thought
+    
+    def work(self, task):
+        """Agent performs work on the task"""
+        print(f"\\n{'='*50}")
+        print(f"🤖 {self.name} ({self.role})")
+        print(f"{'='*50}")
+        
+        result = self.think(task)
+        print(f"\\n{result}")
+        
+        return result
+
+# ==================== SPECIALIZED AGENTS ====================
+class ResearchAgent(Agent):
+    """Gathers information about a topic"""
+    
+    def __init__(self):
+        tools = [
+            {"name": "search_web", "description": "Search the internet for information"},
+            {"name": "read_sources", "description": "Read articles and extract key points"}
+        ]
+        super().__init__(
+            name="Research Agent",
+            role="researcher who finds quality sources and extracts information",
+            tools=tools
+        )
+    
+    def research(self, topic):
+        """Research a topic and return key findings"""
+        print(f"\\n📚 Researching: {topic}")
+        
+        findings = {
+            "topic": topic,
+            "key_facts": [
+                f"Fact 1 about {topic}: Important information",
+                f"Fact 2 about {topic}: More details",
+                f"Fact 3 about {topic}: Additional context"
+            ],
+            "sources": ["source1.com", "source2.com"],
+            "summary": f"Research on {topic} completed with {3} key findings"
+        }
+        
+        return self.work(f"Research this topic and find key information: {topic}")
+
+class WriterAgent(Agent):
+    """Writes the actual content"""
+    
+    def __init__(self):
+        tools = [
+            {"name": "write_content", "description": "Write high-quality content"},
+            {"name": "format_markdown", "description": "Format content as markdown"}
+        ]
+        super().__init__(
+            name="Writer Agent",
+            role="professional writer who creates engaging content",
+            tools=tools
+        )
+    
+    def write(self, topic, research):
+        """Write content based on research"""
+        print(f"\\n✍️ Writing content about: {topic}")
+        
+        task = f"""Write a blog post about {topic}.
+        Based on this research: {research[:200]}...
+        
+        Make it engaging, well-structured, and informative."""
+        
+        return self.work(task)
+
+class EditorAgent(Agent):
+    """Reviews and improves content"""
+    
+    def __init__(self):
+        tools = [
+            {"name": "check_grammar", "description": "Check grammar and spelling"},
+            {"name": "improve_clarity", "description": "Improve writing clarity"}
+        ]
+        super().__init__(
+            name="Editor Agent",
+            role="professional editor who ensures high quality",
+            tools=tools
+        )
+    
+    def edit(self, content):
+        """Review and improve content"""
+        print(f"\\n📝 Editing content")
+        
+        task = f"""Review this content and suggest improvements:
+        {content[:300]}...
+        
+        Check for:
+        - Grammar and spelling
+        - Clarity and flow
+        - Structure and organization
+        - Engagement level"""
+        
+        return self.work(task)
+
+# ==================== AGENT COORDINATOR ====================
+class AgentCoordinator:
+    """Manages multiple agents and their collaboration"""
+    
+    def __init__(self):
+        self.research_agent = ResearchAgent()
+        self.writer_agent = WriterAgent()
+        self.editor_agent = EditorAgent()
+        self.workflow_log = []
+    
+    def create_content(self, topic):
+        """Coordinate agents to create content"""
+        print(f"\\n{'#'*60}")
+        print(f"# CONTENT CREATION WORKFLOW FOR: {topic}")
+        print(f"{'#'*60}")
+        
+        # Step 1: Research
+        print("\\n📊 PHASE 1: RESEARCH")
+        research = self.research_agent.research(topic)
+        self.workflow_log.append({"phase": "research", "output": research[:100]})
+        
+        # Step 2: Write
+        print("\\n📊 PHASE 2: WRITING")
+        content = self.writer_agent.write(topic, research)
+        self.workflow_log.append({"phase": "writing", "output": content[:100]})
+        
+        # Step 3: Edit
+        print("\\n📊 PHASE 3: EDITING")
+        final = self.editor_agent.edit(content)
+        self.workflow_log.append({"phase": "editing", "output": final[:100]})
+        
+        # Summary
+        print(f"\\n{'='*60}")
+        print(f"✅ CONTENT CREATION COMPLETE")
+        print(f"{'='*60}")
+        print(f"Topic: {topic}")
+        print(f"Agents involved: Research, Writer, Editor")
+        print(f"Workflow phases: {len(self.workflow_log)}")
+        
+        return {
+            "topic": topic,
+            "workflow": self.workflow_log,
+            "status": "completed"
+        }
+
+# ==================== MAIN ====================
+if __name__ == "__main__":
+    print("\\n🤖 Multi-Agent Content Creation System\\n")
+    
+    coordinator = AgentCoordinator()
+    
+    # Create content on a topic
+    result = coordinator.create_content("Artificial Intelligence in Healthcare")
+    
+    print(f"\\n📊 FINAL RESULT: {json.dumps(result, indent=2)}")</pre>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">3</span>
+                        Run Your Multi-Agent System
+                    </div>
+                    <div class="step-description">
+                        <p>Set your API key and run:</p>
+                        <pre>export ANTHROPIC_API_KEY="your-key"
+python content_creation_agents.py</pre>
+                        <p style="margin-top: 12px;"><strong>You'll see:</strong></p>
+                        <div class="example-output">🤖 Multi-Agent Content Creation System
+
+============================================================
+# CONTENT CREATION WORKFLOW FOR: Artificial Intelligence in Healthcare
+============================================================
+
+📊 PHASE 1: RESEARCH
+==================================================
+🤖 Research Agent (researcher)
+==================================================
+
+Research findings on AI in healthcare:
+- Machine learning improves diagnosis accuracy
+- AI reduces administrative burden on doctors
+- Ethical considerations around data privacy
+
+📊 PHASE 2: WRITING
+==================================================
+🤖 Writer Agent (writer)
+==================================================
+
+Blog Post: AI in Healthcare
+AI is transforming healthcare by...
+
+📊 PHASE 3: EDITING
+==================================================
+🤖 Editor Agent (editor)
+==================================================
+
+Editing review:
+- Grammar: Good
+- Clarity: Excellent
+- Structure: Well-organized
+
+✅ CONTENT CREATION COMPLETE
+============================================================</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🎯</span>
+                    What Just Happened?
+                </div>
+                
+                <div class="card">
+                    <p style="margin-bottom: 12px;"><strong>Agent Specialization:</strong> Each agent had a specific role and skills. Research agent knows how to research. Writer knows how to write.</p>
+                    
+                    <p style="margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--border); margin-bottom: 12px;"><strong>Autonomy:</strong> Each agent made decisions about how to do its job. No micromanagement needed.</p>
+                    
+                    <p style="margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--border); margin-bottom: 12px;"><strong>Collaboration:</strong> Coordinator passed work between agents. Output of one became input for the next.</p>
+                    
+                    <p style="margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--border);"><strong>Quality:</strong> Because each agent focused on one thing, the result is better than a single generalist could produce.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="deep-dive-tab" style="display: none;">
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🔍</span>
+                    Understanding Agent Architecture
+                </div>
+                
+                <div class="card">
+                    <p style="margin-bottom: 12px;"><strong>An agent is a loop:</strong></p>
+                    <div class="architecture-box">
+┌─────────────────────────────────┐
+│  1. Agent sees current state     │
+├─────────────────────────────────┤
+│  2. Agent decides what to do     │
+├─────────────────────────────────┤
+│  3. Agent acts (uses tools)      │
+├─────────────────────────────────┤
+│  4. Agent observes result        │
+├─────────────────────────────────┤
+│  5. Repeat until goal achieved   │
+└─────────────────────────────────┘
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-top: 12px;">This loop repeats until the agent achieves its goal or runs out of attempts.</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🧩</span>
+                    Core Patterns
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>Agentic Loop (ReAct Pattern)</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>ReAct = Reasoning + Acting</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;">Agent alternates between thinking and acting.</p>
+                        
+                        <pre>Thought: "I need to find the current weather"
+Action: Call weather API
+Observation: "Temperature is 72°F"
+Thought: "Good, now I can give the user the answer"
+Action: Return answer to user</pre>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Planning (Chain-of-Thought)</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Agents break goals into steps</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;">Instead of jumping to action, agent plans first.</p>
+                        
+                        <pre>Goal: Write a research paper
+Plan:
+  1. Search for papers on topic
+  2. Read and summarize key papers
+  3. Identify gaps in research
+  4. Write introduction
+  5. Write methodology
+  6. Write results
+  7. Write conclusion
+  8. Format and cite</pre>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 12px;">Then executes each step in order.</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Tool Use</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Agents decide which tools to use</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;">Like you would reach for a hammer or screwdriver depending on the job.</p>
+                        
+                        <pre>Available tools:
+- search_web() - Search the internet
+- read_file() - Read local files
+- call_api() - Call external APIs
+- write_file() - Save data
+
+Agent: "I need to search for information"
+Agent: uses search_web()
+
+Agent: "Now I need to save this"
+Agent: uses write_file()</pre>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Memory Types</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Short-term memory:</strong> Current conversation context. Helps agent remember what's happening now.</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">Lasts: One session</p>
+                        
+                        <p><strong>Long-term memory:</strong> Past experiences and knowledge. Helps agent learn from what happened before.</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">Lasts: Across sessions, stored in database</p>
+                        
+                        <p><strong>Working memory:</strong> Current task context. What am I working on right now?</p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Lasts: Duration of current task</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">👥</span>
+                    Multi-Agent Patterns
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>Sequential Collaboration</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Agents work one after another</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;">Output of agent 1 → Input for agent 2 → etc.</p>
+                        
+                        <pre>Researcher writes report
+         ↓
+Editor improves it
+         ↓
+Designer adds visuals
+         ↓
+Publisher publishes it</pre>
+                        
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 12px;"><strong>Good for:</strong> Pipelines, workflows, assembly lines</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Parallel Collaboration</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Agents work at the same time</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;">All start with same task, work independently, combine results.</p>
+                        
+                        <pre>Agent 1 → Analyzes data
+Agent 2 → Finds patterns
+Agent 3 → Checks quality
+Agent 4 → Writes report
+All work simultaneously!</pre>
+                        
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 12px;"><strong>Good for:</strong> Fast processing, independent subtasks</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Hierarchical Collaboration</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Agents organized in hierarchy</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;">Manager agent delegates to worker agents.</p>
+                        
+                        <pre>Manager Agent (CEO)
+    ├── Research Team Lead
+    │   ├── Web Searcher Agent
+    │   └── Paper Reader Agent
+    ├── Writing Team Lead
+    │   ├── Outline Agent
+    │   └── Content Agent
+    └── Quality Team Lead
+        ├── Grammar Checker Agent
+        └── Fact Checker Agent</pre>
+                        
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 12px;"><strong>Good for:</strong> Large teams, complex organization</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🛠️</span>
+                    Building Effective Agents
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>Tool Design</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Good tool design:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px; margin-top: 8px;">
+                            <li>Clear name: "search_web" not "do_stuff"</li>
+                            <li>Clear description: Agent understands what it does</li>
+                            <li>Clear inputs/outputs: Agent knows what to pass</li>
+                            <li>Clear errors: Agent knows when it fails</li>
+                        </ul>
+                        
+                        <p style="margin-top: 12px;"><strong>Bad tool:</strong></p>
+                        <pre>def tool(x):
+    # Do something
+    return result</pre>
+                        
+                        <p style="margin-top: 12px;"><strong>Good tool:</strong></p>
+                        <pre>def search_web(query: str) -> dict:
+    """Search the web for information.
+    
+    Args:
+        query: What to search for
+        
+    Returns:
+        dict with keys: results (list), count (int)
+    """
+    # Implementation
+    return {"results": [...], "count": 3}</pre>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Prompt Engineering for Agents</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Be specific about agent behavior:</strong></p>
+                        <pre>You are a research agent. Your job is to:
+1. Search for reliable sources
+2. Read and extract key information
+3. Synthesize findings into insights
+4. Report with citations
+
+You have access to:
+- search_web() - Search the internet
+- read_url() - Read web pages
+
+Think through each step carefully.
+Check facts before reporting them.</pre>
+                        
+                        <p style="margin-top: 12px;"><strong>Give examples:</strong></p>
+                        <pre>Example 1:
+Input: "What is quantum computing?"
+You should: Search for information, read sources,
+synthesize into clear explanation
+Output: Detailed explanation with sources</pre>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Error Handling</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>Agents need to handle failures:</strong></p>
+                        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Tool fails (API down) - Retry or use alternative</li>
+                            <li>Tool returns bad data - Validate and try again</li>
+                            <li>Agent gets stuck - Set max attempts limit</li>
+                            <li>Conflicting goals - Escalate to human</li>
+                        </ul>
+                        
+                        <p style="margin-top: 12px;"><strong>Pattern:</strong></p>
+                        <pre>max_attempts = 3
+current_attempt = 0
+
+while current_attempt < max_attempts:
+    try:
+        result = agent.work()
+        if result_is_good(result):
+            return result
+    except AgentError:
+        current_attempt += 1
+        
+if current_attempt >= max_attempts:
+    escalate_to_human()</pre>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Agent Communication</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p style="margin-bottom: 12px;"><strong>How agents pass information:</strong></p>
+                        
+                        <p><strong>1. Direct Message</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Agent 1 sends result directly to Agent 2</p>
+                        
+                        <p style="margin-top: 8px;"><strong>2. Shared Queue</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Agents put work in shared queue, others pick it up</p>
+                        
+                        <p style="margin-top: 8px;"><strong>3. Coordinator</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Manager agent routes information between workers</p>
+                        
+                        <p style="margin-top: 8px;"><strong>4. Shared State</strong></p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">All agents can read/write to shared database</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🌍</span>
+                    Real-World Applications
+                </div>
+                
+                <div class="card">
+                    <p style="margin-bottom: 12px;"><strong>Software Development:</strong> Agent team designs, codes, tests, and deploys software automatically</p>
+                    
+                    <p style="margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--border); margin-bottom: 12px;"><strong>Scientific Research:</strong> Agents literature review, design experiments, analyze data, write papers</p>
+                    
+                    <p style="margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--border); margin-bottom: 12px;"><strong>Business Operations:</strong> Agents handle customer service, process invoices, manage inventory, create reports</p>
+                    
+                    <p style="margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--border); margin-bottom: 12px;"><strong>Content Creation:</strong> Agents research topics, write drafts, edit, fact-check, optimize for SEO</p>
+                    
+                    <p style="margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--border);">
+                    <strong>Data Analysis:</strong> Agents collect data, clean it, analyze, find patterns, generate insights</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">⚠️</span>
+                    Challenges & Best Practices
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>Challenge: Agents Getting Stuck</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Problem:</strong> Agent loops forever, taking same action repeatedly.</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;"><strong>Solution:</strong> Set max iterations limit. Track what's been tried. Provide new information or tools.</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Challenge: Hallucinations in Agents</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Problem:</strong> Agent makes up facts instead of using tools.</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;"><strong>Solution:</strong> Require agents to use tools for factual queries. Validate tool outputs. Use RAG for grounding.</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Challenge: Cost Control</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Problem:</strong> Agents make many API calls, costs add up fast.</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;"><strong>Solution:</strong> Set budget limits. Cache tool results. Use cheaper models for simple tasks. Monitor costs closely.</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Challenge: Agent Coordination</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Problem:</strong> Multiple agents conflict or duplicate work.</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;"><strong>Solution:</strong> Use coordinator agent. Assign clear roles. Use shared state to prevent duplication.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">❓</span>
+                    Common Questions
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)">
+                    <span>How is an agent different from function calling?</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Function calling:</strong> You decide which function to call. AI just picks which one.</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">Example: "Call search_web" or "call read_file"</p>
+                        
+                        <p><strong>Agent:</strong> AI decides what to do AND how many times. It loops until goal is reached.</p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Example: Agent autonomously searches, reads, analyzes, decides to search again</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>How many agents should I use?</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Start with 1-2 agents.</strong> Add more as needed.</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;">More agents = more complex, harder to debug. Keep it simple.</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;">Sweet spot: 3-5 specialized agents working together.</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Are agents safer than regular AI?</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Not automatically.</strong> In fact, agents are riskier because they take actions.</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;">A bad agent could delete files, spend money, or send wrong emails.</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;">Solution: Careful guardrails on what agents can do. Human review for important actions.</p>
+                    </div>
+                </div>
+                
+                <div class="collapsible" onclick="toggleCollapsible(this)" style="margin-top: 12px;">
+                    <span>Can I use the same agent for different tasks?</span>
+                    <span class="collapsible-icon">›</span>
+                </div>
+                <div class="content">
+                    <div class="content-inner">
+                        <p><strong>Yes, but not ideal.</strong> Generalist agents are less effective than specialists.</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;">One agent doing research, writing, editing, and designing? Not great at any of them.</p>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;">Better: Specialize agents. Research agent only researches. Writer agent only writes.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 0.5px solid var(--border);">
+            <div class="section-title">
+                <span class="section-icon">🎓</span>
+                Next Steps to Build Agents
+            </div>
+            <div class="card">
+                <ol style="padding-left: 20px; color: var(--text-secondary); font-size: 14px;">
+                    <li style="margin-bottom: 8px;">Run the multi-agent project above</li>
+                    <li style="margin-bottom: 8px;">Create your own agent with 2-3 tools</li>
+                    <li style="margin-bottom: 8px;">Build a second specialized agent</li>
+                    <li style="margin-bottom: 8px;">Create a coordinator to manage them</li>
+                    <li style="margin-bottom: 8px;">Add error handling and retry logic</li>
+                    <li style="margin-bottom: 8px;">Implement agent memory (short and long-term)</li>
+                    <li style="margin-bottom: 8px;">Explore agent frameworks like AutoGPT, LangChain agents</li>
+                    <li>Deploy multi-agent system and monitor performance</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function switchTab(tab) {
+            // Hide all tabs
+            document.getElementById('basics-tab').style.display = 'none';
+            document.getElementById('problems-tab').style.display = 'none';
+            document.getElementById('project-tab').style.display = 'none';
+            document.getElementById('deep-dive-tab').style.display = 'none';
+            
+            // Show selected tab
+            document.getElementById(tab + '-tab').style.display = 'block';
+            
+            // Update nav buttons
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        function toggleCollapsible(element) {
+            const collapsible = element;
+            const content = element.nextElementSibling;
+            
+            collapsible.classList.toggle('active');
+            content.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
